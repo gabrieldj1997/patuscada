@@ -2162,46 +2162,7 @@ module.exports = {
   \*****************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
-    axios = _require["default"];
-
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
-var messages_el = document.getElementById('messages');
-var username_input = document.getElementById('username');
-var message_input = document.getElementById('message_input');
-var message_form = document.getElementById('message_form');
-message_form.addEventListener('submit', function (e) {
-  e.preventDefault();
-  var has_errors = false;
-
-  if (username_input.value == "") {
-    username_input.classList.add('is-invalid');
-    has_errors = true;
-  }
-
-  if (message_input.value == "") {
-    message_input.classList.add('is-invalid');
-    has_errors = true;
-  }
-
-  if (has_errors) {
-    return;
-  }
-
-  var options = {
-    method: 'POST',
-    url: window.location.href + 'send-message',
-    data: {
-      username: username_input.value,
-      message: message_input.value
-    }
-  };
-  axios(options);
-});
-window.Echo.channel('chat').listen('.message', function (e) {
-  messages_el.innerHTML += "<div class=\"message\"><strong>".concat(e.username, "</strong>: ").concat(e.message, "</div>");
-});
 
 /***/ }),
 

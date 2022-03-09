@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Events\Message;
+use App\Http\Controllers\Login;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +29,9 @@ Route::post('/send-message', function (Request $request) {
     );
 
     return response()->json(['status' => 'ok']);
+});
+
+Route::post('/login', [Login::class,'CreatePlayer']);
+Route::get('/login', function(){
+    return csrf_token();
 });
