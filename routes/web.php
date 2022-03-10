@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Events\Message;
-use App\Http\Controllers\Login;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +31,10 @@ Route::post('/send-message', function (Request $request) {
     return response()->json(['status' => 'ok']);
 });
 
-Route::post('/login', [Login::class,'CreatePlayer']);
-Route::get('/login', function(){
-    return csrf_token();
+Route::group(['prefix' => 'login', 'as' => 'Login'], function () {
+    Route::get('/', [LoginController::class, 'login']);
+    Route::post('/', [LoginController::class, 'RegisterLogin']);
+    Route::post('/{id}', [LoginController::class, 'GetLogin']);
+    Route::put('/{id}', [LoginController::class, 'UpdateLogin']);
+    Route::delete('/{id}', [LoginController::class, 'DeleteLogin']);
 });

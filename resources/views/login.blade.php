@@ -20,7 +20,7 @@
             console.log(e)
         });
     </script>
-    <script src="https://www.google.com/recaptcha/api.js?render={{config('recaptcha.v3.public_key')}}"></script>
+    <script src="./js/app.js"></script>
 </body>
 
 </html>

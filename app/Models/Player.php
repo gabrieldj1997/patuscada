@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Players extends Model
+class Player extends Model
 {
-    use HasFactory;
+    protected $table = 'tb_player';
 
     protected $fillable = [
-        'name',
-        'password'
-    ];
+        'username', 
+        'password',
+        'email',
+        'pontuacao'];
 }
