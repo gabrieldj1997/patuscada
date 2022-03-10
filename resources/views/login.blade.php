@@ -8,19 +8,22 @@
     <title>Login Patuscada v.Dj1997</title>
 </head>
 <body>
+    <a href="{{ url('/login/cadastro') }}">Cadastro</a>
+    <a href="{{ url('/login/truncate') }}">Excluir logins</a>
     <form id="login" data-grecaptcha-action="message">
         <input type="text" name="username" id="username" placeholder="Digite seu login...">
         <input type="text" name="password" id="password" placeholder="Digite sua senha...">
         <button type="submit" id="login">login</button>
         <button type="submit" id="cadaster">cadaster</button>
     </form>
+    
     <script>
         var form = document.getElementById('cadaster');
         form.addEventListener('submit', function(e) {
             console.log(e)
         });
     </script>
-    <script src="./js/app.js"></script>
+    <script src="{{ url('./js/app.js') }}"></script>
 </body>
 
 </html>

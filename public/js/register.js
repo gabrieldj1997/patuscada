@@ -2380,27 +2380,32 @@ process.umask = function() { return 0; };
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!******************************!*\
-  !*** ./resources/js/chat.js ***!
-  \******************************/
+/*!****************************************!*\
+  !*** ./resources/js/login/register.js ***!
+  \****************************************/
 var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
     axios = _require["default"];
 
-var messages_el = document.getElementById('messages');
-var username_input = document.getElementById('username');
-var message_input = document.getElementById('message_input');
-var message_form = document.getElementById('message_form');
-message_form.addEventListener('submit', function (e) {
+var username = document.getElementById('username_input');
+var passsword = document.getElementById('password_input');
+var email = document.getElementById('email_input');
+var cadaster_form = document.getElementById('cadaster_form');
+cadaster_form.addEventListener('submit', function (e) {
   e.preventDefault();
   var has_errors = false;
 
-  if (username_input.value == "") {
-    username_input.classList.add('is-invalid');
+  if (username.value == "") {
+    username.classList.add('is-invalid');
     has_errors = true;
   }
 
-  if (message_input.value == "") {
-    message_input.classList.add('is-invalid');
+  if (passsword.value == "") {
+    passsword.classList.add('is-invalid');
+    has_errors = true;
+  }
+
+  if (email.value == "") {
+    email.classList.add('is-invalid');
     has_errors = true;
   }
 
@@ -2410,16 +2415,25 @@ message_form.addEventListener('submit', function (e) {
 
   var options = {
     method: 'POST',
-    url: window.location.origin + '/send-message',
+    url: window.location.origin + '/login',
     data: {
-      username: username_input.value,
-      message: message_input.value
+      username: username.value,
+      password: passsword.value,
+      email: email.value
     }
   };
-  axios(options);
-});
-window.Echo.channel('chat').listen('.message', function (e) {
-  messages_el.innerHTML += "<div class=\"message\"><strong>".concat(e.username, "</strong>: ").concat(e.message, "</div>");
+  console.log(options);
+  axios(options).then(function (resp) {
+    if (resp.status == 200) {
+      alert(resp.data.status);
+      window.location.href = window.location.origin + '/login';
+      return;
+    }
+
+    alert('Jogador não cadastrado, nickname já existe');
+  })["catch"](function (err) {
+    alert('Jogador não cadastrado' + err);
+  });
 });
 })();
 

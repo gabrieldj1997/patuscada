@@ -26,14 +26,13 @@ message_form.addEventListener('submit', (e) => {
 
     const options = {
         method: 'POST',
-        url: window.location.href+'send-message',
+        url: window.location.origin+'/send-message',
         data: {
             username: username_input.value,
             message: message_input.value
         }
     }
 
-    console.log(options);
     axios(options);
 
 });
