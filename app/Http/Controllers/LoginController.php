@@ -98,6 +98,6 @@ class LoginController extends Controller
     {
         Player::truncate();
 
-        return Redirect::to('http://localhost:8000/login');
+        return redirect('/login');
     }
 }
