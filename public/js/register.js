@@ -2417,8 +2417,9 @@ grecaptcha.ready(function () {
               window.location.href = window.location.origin + '/login';
               return;
             }
+
             alert('Jogador não cadastrado, nickname já existe');
-            console.log(resp);
+            console.log(resp.dada);
           })["catch"](function (err) {
             alert('Jogador não cadastrado' + err);
           });

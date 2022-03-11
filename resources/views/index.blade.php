@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./css/app.css">
 </head>
 <body>
+    <a href="{{ url('/login') }}">login</a>
     <div class="app">
         <header>
             <h1>Let's play</h1>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <meta name="grecaptcha-key" content="{{config('recaptcha.v3.public_key')}}">
     <title>Login Patuscada v.Dj1997</title>
 </head>
+
 <body>
     <a href="{{ url('/login/cadastro') }}">Cadastro</a>
     <a href="{{ url('/login/truncate') }}">Excluir logins</a>
@@ -16,7 +18,7 @@
         <button type="submit" id="login">login</button>
         <button type="submit" id="cadaster">cadaster</button>
     </form>
-    
+
     <script>
         var form = document.getElementById('cadaster');
         form.addEventListener('submit', function(e) {

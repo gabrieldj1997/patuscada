@@ -2384,8 +2384,10 @@ var __webpack_exports__ = {};
   !*** ./resources/js/chat.js ***!
   \******************************/
 var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
-    axios = _require["default"];
+    axios = _require["default"]; // Enable pusher logging - don't include this in production
 
+
+Pusher.logToConsole = true;
 var messages_el = document.getElementById('messages');
 var username_input = document.getElementById('username');
 var message_input = document.getElementById('message_input');

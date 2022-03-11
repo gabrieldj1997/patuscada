@@ -1,5 +1,8 @@
 const { default: axios } = require('axios');
 
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
 const messages_el = document.getElementById('messages');
 const username_input = document.getElementById('username');
 const message_input = document.getElementById('message_input');
