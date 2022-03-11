@@ -3,51 +3,50 @@ const { default: axios } = require('axios');
 const username = document.getElementById('username_input');
 const passsword = document.getElementById('password_input');
 const email = document.getElementById('email_input');
-const cadaster_form = document.getElementById('cadaster_form');
 
-cadaster_form.addEventListener('submit', (e) => {
-    e.preventDefault();
+let grecaptchaKeyMeta = document.querySelector("meta[name='grecaptcha-key']");
+let grecaptchaKey = grecaptchaKeyMeta.getAttribute("content");
 
-    let has_errors = false;
+grecaptcha.ready(function () {
+    let forms = document.querySelectorAll('form[data-grecaptcha-action]');
 
-    if(username.value == "") {
-        username.classList.add('is-invalid');
-        has_errors = true;
-    }
+    Array.from(forms).forEach(function (form) {
+        
+        form.onsubmit = (e) => {
 
-    if(passsword.value == "") {
-        passsword.classList.add('is-invalid');
-        has_errors = true;
-    }
+            e.preventDefault();
+            
+            let grecaptchaAction = form.getAttribute('data-grecaptcha-action');
+            
+            grecaptcha.ready(function () {
+                
+                grecaptcha.execute(grecaptchaKey, { action: grecaptchaAction })
+                    .then((token) => {
 
-    if(email.value == "") {
-        email.classList.add('is-invalid');
-        has_errors = true;
-    }
-
-    if(has_errors){
-        return;
-    }
-
-    const options = {
-        method: 'POST',
-        url: window.location.origin+'/login',
-        data: {
-            username: username.value,
-            password: passsword.value,
-            email: email.value
+                        const options = {
+                            method: 'POST',
+                            url: window.location.origin + '/login',
+                            data: {
+                                username: username.value,
+                                password: passsword.value,
+                                email: email.value,
+                                grecaptcha: token
+                            }
+                        }
+            
+                        axios(options).then(resp => {
+                            if (resp.status == 200) {
+                                alert(resp.data.status);
+                                window.location.href = window.location.origin + '/login';
+                                return
+                            }
+                            alert('Jogador não cadastrado, nickname já existe');
+                            console.log(resp.dada);
+                        }).catch(err => {
+                            alert('Jogador não cadastrado' + err)
+                        });
+                    });
+            });
         }
-    }
-    console.log(options);
-    axios(options).then(resp => {
-        if(resp.status == 200) {
-        alert(resp.data.status);
-        window.location.href = window.location.origin+'/login';
-        return
-        }
-        alert('Jogador não cadastrado, nickname já existe');
-    }).catch(err => {
-        alert('Jogador não cadastrado' + err)
     });
-
 });

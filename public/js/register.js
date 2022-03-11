@@ -2389,50 +2389,42 @@ var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 var username = document.getElementById('username_input');
 var passsword = document.getElementById('password_input');
 var email = document.getElementById('email_input');
-var cadaster_form = document.getElementById('cadaster_form');
-cadaster_form.addEventListener('submit', function (e) {
-  e.preventDefault();
-  var has_errors = false;
-
-  if (username.value == "") {
-    username.classList.add('is-invalid');
-    has_errors = true;
-  }
-
-  if (passsword.value == "") {
-    passsword.classList.add('is-invalid');
-    has_errors = true;
-  }
-
-  if (email.value == "") {
-    email.classList.add('is-invalid');
-    has_errors = true;
-  }
-
-  if (has_errors) {
-    return;
-  }
-
-  var options = {
-    method: 'POST',
-    url: window.location.origin + '/login',
-    data: {
-      username: username.value,
-      password: passsword.value,
-      email: email.value
-    }
-  };
-  console.log(options);
-  axios(options).then(function (resp) {
-    if (resp.status == 200) {
-      alert(resp.data.status);
-      window.location.href = window.location.origin + '/login';
-      return;
-    }
-
-    alert('Jogador não cadastrado, nickname já existe');
-  })["catch"](function (err) {
-    alert('Jogador não cadastrado' + err);
+var grecaptchaKeyMeta = document.querySelector("meta[name='grecaptcha-key']");
+var grecaptchaKey = grecaptchaKeyMeta.getAttribute("content");
+grecaptcha.ready(function () {
+  var forms = document.querySelectorAll('form[data-grecaptcha-action]');
+  Array.from(forms).forEach(function (form) {
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var grecaptchaAction = form.getAttribute('data-grecaptcha-action');
+      grecaptcha.ready(function () {
+        grecaptcha.execute(grecaptchaKey, {
+          action: grecaptchaAction
+        }).then(function (token) {
+          var options = {
+            method: 'POST',
+            url: window.location.origin + '/login',
+            data: {
+              username: username.value,
+              password: passsword.value,
+              email: email.value,
+              grecaptcha: token
+            }
+          };
+          axios(options).then(function (resp) {
+            if (resp.status == 200) {
+              alert(resp.data.status);
+              window.location.href = window.location.origin + '/login';
+              return;
+            }
+            alert('Jogador não cadastrado, nickname já existe');
+            console.log(resp);
+          })["catch"](function (err) {
+            alert('Jogador não cadastrado' + err);
+          });
+        });
+      });
+    };
   });
 });
 })();

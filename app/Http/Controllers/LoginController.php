@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Player;
+use App\Rules\ReCAPTCHAv3;
 use Illuminate\Support\Facades\Redirect;
 use Exception;
 
@@ -36,6 +37,12 @@ class LoginController extends Controller
     }
     public function RegisterLogin(Request $req)
     {
+        $req->validate([
+            'username' => 'required',
+            'password' => 'required',
+            'email' => 'required',
+            'grecaptcha' => ['required', new ReCAPTCHAv3],
+        ]);
         try {
             $login = new Player();
             $login->username = $req->input('username');

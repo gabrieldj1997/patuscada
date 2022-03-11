@@ -34,7 +34,7 @@ Route::post('/send-message', function (Request $request) {
 Route::group(['prefix' => 'login', 'as' => 'Login'], function () {
     Route::get('/', [LoginController::class, 'Login']);
     Route::get('/cadastro', [LoginController::class, 'Cadaster']);
-    Route::post('/', [LoginController::class, 'RegisterLogin']);
+    Route::post('/', [LoginController::class, 'RegisterLogin'])->name('registerLogin');
     Route::post('/{id}', [LoginController::class, 'GetLogin']);
     Route::put('/{id}', [LoginController::class, 'UpdateLogin']);
     Route::delete('/{id}', [LoginController::class, 'DeleteLogin']);
