@@ -2380,9 +2380,9 @@ process.umask = function() { return 0; };
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!*************************************!*\
-  !*** ./resources/js/login/login.js ***!
-  \*************************************/
+/*!*********************************************!*\
+  !*** ./resources/js/login/registerLogin.js ***!
+  \*********************************************/
 var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
     axios = _require["default"];
 
@@ -2394,53 +2394,17 @@ var grecaptchaKey = grecaptchaKeyMeta.getAttribute("content");
 grecaptcha.ready(function () {
   var forms = document.querySelectorAll('form[data-grecaptcha-action]');
   Array.from(forms).forEach(function (form) {
-    if (form[0].id == 'login_form') {
-      form.onsubmit = function (e) {
-        e.preventDefault();
-        var grecaptchaAction = form.getAttribute('data-grecaptcha-action');
-        grecaptcha.ready(function () {
-          grecaptcha.execute(grecaptchaKey, {
-            action: grecaptchaAction
-          }).then(login);
-        });
-      };
-    } else {
-      form.onsubmit = function (e) {
-        e.preventDefault();
-        var grecaptchaAction = form.getAttribute('data-grecaptcha-action');
-        grecaptcha.ready(function () {
-          grecaptcha.execute(grecaptchaKey, {
-            action: grecaptchaAction
-          }).then(registerLogin);
-        });
-      };
-    }
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var grecaptchaAction = form.getAttribute('data-grecaptcha-action');
+      grecaptcha.ready(function () {
+        grecaptcha.execute(grecaptchaKey, {
+          action: grecaptchaAction
+        }).then(registerLogin);
+      });
+    };
   });
 });
-
-var login = function login(token) {
-  var options = {
-    method: 'GET',
-    url: window.location.origin + "/".concat(username.value),
-    data: {
-      username: username.value,
-      password: passsword.value,
-      grecaptcha: token
-    }
-  };
-  axios(options).then(function (resp) {
-    if (resp.status == 200) {
-      alert(resp.data.status);
-      window.location.href = window.location.origin + '/login';
-      return;
-    }
-
-    alert('Jogador não cadastrado, nickname já existe');
-    console.log(resp.dada);
-  })["catch"](function (err) {
-    alert('Jogador não cadastrado' + err);
-  });
-};
 
 var registerLogin = function registerLogin(token) {
   var options = {

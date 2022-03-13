@@ -10,9 +10,11 @@ use Exception;
 
 class LoginController extends Controller
 {
+    private static $qtdJogadoreLogados;
+
     public function Login()
     {
-        return view('login/login');
+        return view('login/login', ['qtdJogadoresLogados' => self::$qtdJogadoreLogados]);
     }
     public function Register()
     {
@@ -23,16 +25,19 @@ class LoginController extends Controller
         try {
             if (Player::where('id', $id)->exists()) {
                 $player = Player::get()->where('id', $id)->frist();
-                return response($player, 200);
+                $this->qtdJogadoreLogados++;
+                return response()->json(['status' => 'Success', 'data' => $player],200);
             }
 
             if (Player::where('username', $id)->exists()) {
+                $this->AddJogadorOnline();
+                return 'true';
                 $player = Player::get()->where('username', $id)->first();
-                return response($player, 200);
+                return response()->json(['status' => 'Success', 'data' => $player],200);
             }
-            return response('Jogador não cadastrado', 200);
+            return response()->json(['status' => 'Error', 'data' => 'Player not found'],204);
         } catch (Exception $e) {
-            return response($e, 200);
+            return response($e, 500);
         }
     }
     public function RegisterLogin(Request $req)
@@ -52,7 +57,7 @@ class LoginController extends Controller
 
             return response()->json(['status' => 'Login cadastro com sucesso!']);
         } catch (Exception $e) {
-            return response()->json(['err' => $e->getMessage()], 202);
+            return response()->json(['err' => $e->getMessage()], 500);
         }
     }
     public function UpdateLogin(Request $req, $id)
@@ -73,9 +78,9 @@ class LoginController extends Controller
 
             $player->save();
 
-            return response()->json(['status' => 'Login atualizado com sucesso!']);
+            return response()->json(['status' => 'Login atualizado com sucesso!', 'data' => $player],200);
         } catch (Exception $e) {
-            return response()->json(['Erro ao atualizar o login' => $e->getMessage()], 200);
+            return response()->json(['Erro ao atualizar o login' => $e->getMessage()], 500);
         }
     }
     public function DeleteLogin($id)
@@ -89,9 +94,9 @@ class LoginController extends Controller
                 $player = Player::where('username', $id);
             }
             $player->delete();
-            return response()->json(['status' => 'Login deletado com sucesso!']);
+            return response()->json(['status' => 'Login deletado com sucesso!', 'data' => $player],200);
         } catch (Exception $e) {
-            return response()->json(['Erro ao deletar o login' => $e->getMessage()], 200);
+            return response()->json(['Erro ao deletar o login' => $e->getMessage()], 500);
         }
     }
     public function Truncate()
@@ -100,4 +105,21 @@ class LoginController extends Controller
 
         return redirect('/login');
     }
+
+    private function AddJogadorOnline(){
+        self::$qtdJogadoreLogados++;
+    }
+
+    /*
+     Model Response Login
+        {
+            status: 'description of status of request',
+            data: {
+                id: 'id of player',
+                username: 'username of player',
+                email: 'email of player',
+                password: 'password of player'
+            }
+        }
+    */
 }

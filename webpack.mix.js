@@ -12,6 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-.postCss('resources/css/app.css', 'public/css', [])
+.postCss('resources/css/app.css', 'public/css')
 .js('resources/js/chat/chat.js', 'public/js')
-.js('resources/js/login/login.js', 'public/js');
+.js('resources/js/login/getLogin.js', 'public/js')
+.js('resources/js/login/registerLogin.js', 'public/js');

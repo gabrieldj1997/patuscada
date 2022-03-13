@@ -18,6 +18,6 @@
         <input type="text" name="email" id="email_input" placeholder="Digite seu email...">
         <button type="submit" id="cadaster">Cadastrar</button>
     </form>
-    <script src="{{ url('./js/login.js') }}"></script>
+    <script src="{{ url('./js/registerLogin.js') }}"></script>
 </body>
 </html>

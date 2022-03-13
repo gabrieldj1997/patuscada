@@ -25836,10 +25836,10 @@ runtime.setup(pusher_Pusher);
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!******************************!*\
-  !*** ./resources/js/chat.js ***!
-  \******************************/
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/*!***********************************!*\
+  !*** ./resources/js/chat/chat.js ***!
+  \***********************************/
+__webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
     axios = _require["default"]; // Enable pusher logging - don't include this in production

@@ -2381,14 +2381,13 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 /*!****************************************!*\
-  !*** ./resources/js/login/register.js ***!
+  !*** ./resources/js/login/getLogin.js ***!
   \****************************************/
 var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
     axios = _require["default"];
 
 var username = document.getElementById('username_input');
 var passsword = document.getElementById('password_input');
-var email = document.getElementById('email_input');
 var grecaptchaKeyMeta = document.querySelector("meta[name='grecaptcha-key']");
 var grecaptchaKey = grecaptchaKeyMeta.getAttribute("content");
 grecaptcha.ready(function () {
@@ -2400,34 +2399,35 @@ grecaptcha.ready(function () {
       grecaptcha.ready(function () {
         grecaptcha.execute(grecaptchaKey, {
           action: grecaptchaAction
-        }).then(function (token) {
-          var options = {
-            method: 'POST',
-            url: window.location.origin + '/login',
-            data: {
-              username: username.value,
-              password: passsword.value,
-              email: email.value,
-              grecaptcha: token
-            }
-          };
-          axios(options).then(function (resp) {
-            if (resp.status == 200) {
-              alert(resp.data.status);
-              window.location.href = window.location.origin + '/login';
-              return;
-            }
-
-            alert('Jogador não cadastrado, nickname já existe');
-            console.log(resp.dada);
-          })["catch"](function (err) {
-            alert('Jogador não cadastrado' + err);
-          });
-        });
+        }).then(login);
       });
     };
   });
 });
+
+var login = function login(token) {
+  var options = {
+    method: 'POST',
+    url: window.location.origin + "/login/".concat(username.value),
+    data: {
+      username: username.value,
+      password: passsword.value,
+      grecaptcha: token
+    }
+  };
+  axios(options).then(function (resp) {
+    if (resp.status == 200) {
+      alert("Jogador: ".concat(resp.data.data.username, " logado com sucesso"));
+      window.location.href = window.location.origin + '/login';
+      return;
+    }
+
+    alert('Jogador não cadastrado');
+    console.log(resp.data);
+  })["catch"](function (err) {
+    alert('Jogador não cadastrado' + err);
+  });
+};
 })();
 
 /******/ })()

@@ -12,22 +12,16 @@
 </head>
 
 <body>
+    <div>Quantidade de jogadore online = {{ $qtdJogadoresLogados }}</div>
     <a href="{{ url('/login/cadastro') }}">Cadastro</a>
     <a href="{{ url('/login/truncate') }}">Excluir logins</a>
-    <form id="login" data-grecaptcha-action="login">
-        <input type="text" name="username" id="username" placeholder="Digite seu login...">
-        <input type="text" name="password" id="password" placeholder="Digite sua senha...">
-        <button type="submit" id="login">login</button>
-        <button type="submit" id="cadaster">cadaster</button>
+    <form id="login_form" data-grecaptcha-action="login">
+        <input type="text" name="username" id="username_input" placeholder="Digite seu login...">
+        <input type="text" name="password" id="password_input" placeholder="Digite sua senha...">
+        <button type="submit" id="login_submit">login</button>
     </form>
 
-    <script>
-        var form = document.getElementById('cadaster');
-        form.addEventListener('submit', function(e) {
-            console.log(e)
-        });
-    </script>
-    <script src="{{ url('./js/login.js') }}"></script>
+    <script src="{{ url('./js/getLogin.js') }}"></script>
 </body>
 
 </html>
