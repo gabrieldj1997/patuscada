@@ -10,11 +10,9 @@ use Exception;
 
 class LoginController extends Controller
 {
-    private static $qtdJogadoreLogados;
-
     public function Login()
     {
-        return view('login/login', ['qtdJogadoresLogados' => self::$qtdJogadoreLogados]);
+        return view('login/login');
     }
     public function Register()
     {
@@ -25,13 +23,10 @@ class LoginController extends Controller
         try {
             if (Player::where('id', $id)->exists()) {
                 $player = Player::get()->where('id', $id)->frist();
-                $this->qtdJogadoreLogados++;
                 return response()->json(['status' => 'Success', 'data' => $player],200);
             }
 
             if (Player::where('username', $id)->exists()) {
-                $this->AddJogadorOnline();
-                return 'true';
                 $player = Player::get()->where('username', $id)->first();
                 return response()->json(['status' => 'Success', 'data' => $player],200);
             }
@@ -105,13 +100,7 @@ class LoginController extends Controller
 
         return redirect('/login');
     }
-
-    private function AddJogadorOnline(){
-        self::$qtdJogadoreLogados++;
-    }
-
-    /*
-     Model Response Login
+    /* Model Response Login
         {
             status: 'description of status of request',
             data: {
