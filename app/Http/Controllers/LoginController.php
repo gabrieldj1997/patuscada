@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Player;
+use App\Models\User;
 use App\Rules\ReCAPTCHAv3;
 use Illuminate\Support\Facades\Redirect;
 use Exception;
@@ -12,28 +14,33 @@ class LoginController extends Controller
 {
     public function Login()
     {
-        return view('login/login');
+        return view('login');
     }
     public function Register()
     {
         return view('login/register');
     }
-    public function GetLogin($id)
+    public function GetLogin(Request $req)
     {
-        try {
-            if (Player::where('id', $id)->exists()) {
-                $player = Player::get()->where('id', $id)->frist();
-                return response()->json(['status' => 'Success', 'data' => $player],200);
-            }
-
-            if (Player::where('username', $id)->exists()) {
-                $player = Player::get()->where('username', $id)->first();
-                return response()->json(['status' => 'Success', 'data' => $player],200);
-            }
-            return response()->json(['status' => 'Error', 'data' => 'Player not found'],204);
-        } catch (Exception $e) {
-            return response($e, 500);
+        return var_dump($req);
+        if (Auth::attempt(['email' => $req->email, 'password' => $req->password]))
+        {
+            return redirect()->intended('dashboard');
         }
+        // try {
+        //     if (User::where('id', $id)->exists()) {
+        //         $player = User::get()->where('id', $id)->frist();
+        //         return response()->json(['status' => 'Success', 'data' => $player],200);
+        //     }
+
+        //     if (User::where('username', $id)->exists()) {
+        //         $player = User::get()->where('username', $id)->first();
+        //         return response()->json(['status' => 'Success', 'data' => $player],200);
+        //     }
+        //     return response()->json(['status' => 'Error', 'data' => 'User not found'],204);
+        // } catch (Exception $e) {
+        //     return response($e, 500);
+        // }
     }
     public function RegisterLogin(Request $req)
     {
@@ -44,9 +51,9 @@ class LoginController extends Controller
             'grecaptcha' => ['required', new ReCAPTCHAv3],
         ]);
         try {
-            $login = new Player();
+            $login = new User();
             $login->username = $req->input('username');
-            $login->password = $req->input('password');
+            $login->password = Hash::make($req->input('password'));
             $login->email = $req->input('email');
             $login->save();
 
@@ -58,15 +65,15 @@ class LoginController extends Controller
     public function UpdateLogin(Request $req, $id)
     {
         try {
-            if (Player::where('id', $id)->exists()) {
-                $player = Player::where('id', $id)->first();
+            if (User::where('id', $id)->exists()) {
+                $player = User::where('id', $id)->first();
             }
 
-            if (Player::where('username', $id)->exists()) {
-                $player = Player::where('username', $id)->first();
+            if (User::where('username', $id)->exists()) {
+                $player = User::where('username', $id)->first();
             }
 
-            $player = Player::find($player->id);
+            $player = User::find($player->id);
             $player->username = is_null($req->input('username')) ? $player->username : $req->input('username');
             $player->password = is_null($req->input('password')) ? $player->password : $req->input('password');
             $player->email = is_null($req->input('email')) ? $player->username : $req->input('email');
@@ -81,12 +88,12 @@ class LoginController extends Controller
     public function DeleteLogin($id)
     {
         try {
-            if (Player::where('id', $id)->exists()) {
-                $player = Player::where('id', $id);
+            if (User::where('id', $id)->exists()) {
+                $player = User::where('id', $id);
             }
 
-            if (Player::where('username', $id)->exists()) {
-                $player = Player::where('username', $id);
+            if (User::where('username', $id)->exists()) {
+                $player = User::where('username', $id);
             }
             $player->delete();
             return response()->json(['status' => 'Login deletado com sucesso!', 'data' => $player],200);
@@ -96,7 +103,7 @@ class LoginController extends Controller
     }
     public function Truncate()
     {
-        Player::truncate();
+        User::truncate();
 
         return redirect('/login');
     }
