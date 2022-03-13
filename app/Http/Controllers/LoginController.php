@@ -12,11 +12,11 @@ class LoginController extends Controller
 {
     public function Login()
     {
-        return view('login');
+        return view('login/login');
     }
-    public function Cadaster()
+    public function Register()
     {
-        return view('cadaster');
+        return view('login/register');
     }
     public function GetLogin($id)
     {

@@ -16,8 +16,8 @@
         <input type="text" name="username" id="username_input" placeholder="Digite seu login...">
         <input type="text" name="password" id="password_input" placeholder="Digite sua senha...">
         <input type="text" name="email" id="email_input" placeholder="Digite seu email...">
-        <button type="submit" id="cadaster">Registrar</button>
+        <button type="submit" id="cadaster">Cadastrar</button>
     </form>
-    <script src="{{ url('./js/register.js') }}"></script>
+    <script src="{{ url('./js/login.js') }}"></script>
 </body>
 </html>

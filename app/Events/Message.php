@@ -14,6 +14,7 @@ class Message implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    private static  $teste;
     public $username;
     public $message;
     /**

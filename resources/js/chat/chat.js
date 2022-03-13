@@ -1,3 +1,5 @@
+require('../bootstrap');
+
 const { default: axios } = require('axios');
 
 // Enable pusher logging - don't include this in production
