@@ -2418,15 +2418,17 @@ var registerLogin = function registerLogin(token) {
     }
   };
   axios(options).then(function (resp) {
+    console.log(resp);
     if (resp.status == 200) {
       alert(resp.data.status);
-      window.location.href = window.location.origin + '/login';
+      //window.location.href = window.location.origin + '/login';
       return;
     }
 
     alert('Jogador não cadastrado, nickname já existe');
     console.log(resp.dada);
-  })["catch"](function (err) {
+  }).catch(err => {
+    console.log(err)
     alert('Jogador não cadastrado' + err);
   });
 };

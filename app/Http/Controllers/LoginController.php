@@ -14,7 +14,7 @@ class LoginController extends Controller
 {
     public function Login()
     {
-        return view('login');
+        return view('login.login');
     }
     public function Register()
     {
@@ -52,14 +52,17 @@ class LoginController extends Controller
         ]);
         try {
             $login = new User();
-            $login->username = $req->input('username');
+            $login->name = 'teste';
+            $login->nickname = $req->input('username');
             $login->password = Hash::make($req->input('password'));
             $login->email = $req->input('email');
+            
+
             $login->save();
 
             return response()->json(['status' => 'Login cadastro com sucesso!']);
         } catch (Exception $e) {
-            return response()->json(['err' => $e->getMessage()], 500);
+            return response()->json(['err' => $e->getMessage()], 200);
         }
     }
     public function UpdateLogin(Request $req, $id)
@@ -69,14 +72,14 @@ class LoginController extends Controller
                 $player = User::where('id', $id)->first();
             }
 
-            if (User::where('username', $id)->exists()) {
-                $player = User::where('username', $id)->first();
+            if (User::where('nickname', $id)->exists()) {
+                $player = User::where('nickname', $id)->first();
             }
 
             $player = User::find($player->id);
-            $player->username = is_null($req->input('username')) ? $player->username : $req->input('username');
+            $player->nickname = is_null($req->input('username')) ? $player->nickname : $req->input('username');
             $player->password = is_null($req->input('password')) ? $player->password : $req->input('password');
-            $player->email = is_null($req->input('email')) ? $player->username : $req->input('email');
+            $player->email = is_null($req->input('email')) ? $player->nickname : $req->input('email');
 
             $player->save();
 
@@ -92,8 +95,8 @@ class LoginController extends Controller
                 $player = User::where('id', $id);
             }
 
-            if (User::where('username', $id)->exists()) {
-                $player = User::where('username', $id);
+            if (User::where('nickname', $id)->exists()) {
+                $player = User::where('nickname', $id);
             }
             $player->delete();
             return response()->json(['status' => 'Login deletado com sucesso!', 'data' => $player],200);
@@ -112,7 +115,7 @@ class LoginController extends Controller
             status: 'description of status of request',
             data: {
                 id: 'id of player',
-                username: 'username of player',
+                nickname: 'nickname of player',
                 email: 'email of player',
                 password: 'password of player'
             }
