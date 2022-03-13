@@ -15,7 +15,7 @@
     <a href="{{ url('/login/cadastro') }}">Cadastro</a>
     <a href="{{ url('/login/truncate') }}">Excluir logins</a>
     <form id="login_form" data-grecaptcha-action="login">
-        <input type="text" name="username" id="username_input" placeholder="Digite seu login...">
+        <input type="text" name="nickname" id="nickname_input" placeholder="Digite seu nickname...">
         <input type="text" name="password" id="password_input" placeholder="Digite sua senha...">
         <button type="submit" id="login_submit">login</button>
     </form>

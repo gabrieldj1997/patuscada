@@ -33,8 +33,8 @@ class LoginController extends Controller
         //         return response()->json(['status' => 'Success', 'data' => $player],200);
         //     }
 
-        //     if (User::where('username', $id)->exists()) {
-        //         $player = User::get()->where('username', $id)->first();
+        //     if (User::where('nickname', $id)->exists()) {
+        //         $player = User::get()->where('nickname', $id)->first();
         //         return response()->json(['status' => 'Success', 'data' => $player],200);
         //     }
         //     return response()->json(['status' => 'Error', 'data' => 'User not found'],204);
@@ -45,15 +45,16 @@ class LoginController extends Controller
     public function RegisterLogin(Request $req)
     {
         $req->validate([
-            'username' => 'required',
+            'nickname' => 'required',
+            'name' => 'required',
             'password' => 'required',
             'email' => 'required',
             'grecaptcha' => ['required', new ReCAPTCHAv3],
         ]);
         try {
             $login = new User();
-            $login->name = 'teste';
-            $login->nickname = $req->input('username');
+            $login->name = $req->input('name');
+            $login->nickname = $req->input('nickname');
             $login->password = Hash::make($req->input('password'));
             $login->email = $req->input('email');
             
@@ -77,7 +78,7 @@ class LoginController extends Controller
             }
 
             $player = User::find($player->id);
-            $player->nickname = is_null($req->input('username')) ? $player->nickname : $req->input('username');
+            $player->nickname = is_null($req->input('nickname')) ? $player->nickname : $req->input('nickname');
             $player->password = is_null($req->input('password')) ? $player->password : $req->input('password');
             $player->email = is_null($req->input('email')) ? $player->nickname : $req->input('email');
 

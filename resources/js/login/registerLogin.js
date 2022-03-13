@@ -1,6 +1,7 @@
 const { default: axios } = require('axios');
 
-const username = document.getElementById('username_input');
+const name = document.getElementById('name_input');
+const nickname = document.getElementById('nickname_input');
 const passsword = document.getElementById('password_input');
 const email = document.getElementById('email_input');
 
@@ -34,7 +35,8 @@ let registerLogin = (token) => {
         method: 'POST',
         url: window.location.origin + '/login',
         data: {
-            username: username.value,
+            name: name.value,
+            nickname: nickname.value,
             password: passsword.value,
             email: email.value,
             grecaptcha: token

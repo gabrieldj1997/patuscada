@@ -1,6 +1,6 @@
 const { default: axios } = require('axios');
 
-const username = document.getElementById('username_input');
+const nickname = document.getElementById('nickname_input');
 const passsword = document.getElementById('password_input');
 
 let grecaptchaKeyMeta = document.querySelector("meta[name='grecaptcha-key']");
@@ -29,9 +29,9 @@ grecaptcha.ready(function () {
 let login = (token) => {
     const options = {
         method: 'POST',
-        url: window.location.origin + `/login/${username.value}`,
+        url: window.location.origin + `/login/${nickname.value}`,
         data: {
-            username: username.value,
+            nickname: nickname.value,
             password: passsword.value,
             grecaptcha: token
         }
@@ -39,7 +39,7 @@ let login = (token) => {
 
     axios(options).then(resp => {
         if (resp.status == 200) {
-            alert(`Jogador: ${resp.data.data.username} logado com sucesso`);
+            alert(`Jogador: ${resp.data.data.nickname} logado com sucesso`);
             window.location.href = window.location.origin + '/login';
             return
         }
