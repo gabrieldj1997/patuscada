@@ -10,8 +10,14 @@ class Player extends Model
     protected $table = 'tb_player';
 
     protected $fillable = [
-        'username', 
+        'nickname',
         'password',
         'email',
-        'pontuacao'];
+        'pontuacao'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

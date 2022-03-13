@@ -12,7 +12,6 @@
 </head>
 
 <body>
-    <div>Quantidade de jogadore online = {{ $qtdJogadoresLogados }}</div>
     <a href="{{ url('/login/cadastro') }}">Cadastro</a>
     <a href="{{ url('/login/truncate') }}">Excluir logins</a>
     <form id="login_form" data-grecaptcha-action="login">
