@@ -1,4 +1,9 @@
+require('../bootstrap');
 const { default: axios } = require('axios');
+
+//Urls
+const urlLogin = window.location.origin + `/login/entrar`;
+const urlRegisterLogin = window.location.origin + `/login/cadastro`;
 
 const name = document.getElementById('name_input');
 const nickname = document.getElementById('nickname_input');
@@ -33,7 +38,7 @@ let registerLogin = (token) => {
 
     const options = {
         method: 'POST',
-        url: window.location.origin + '/login',
+        url: urlRegisterLogin,
         data: {
             name: name.value,
             nickname: nickname.value,
@@ -46,12 +51,12 @@ let registerLogin = (token) => {
     axios(options).then(resp => {
         if (resp.status == 200) {
             alert(resp.data.status);
-            window.location.href = window.location.origin + '/login';
+            window.location.href = urlLogin;
             return
         }
         alert('Jogador não cadastrado, nickname já existe');
         console.log(resp.dada);
     }).catch(err => {
-        alert('Jogador não cadastrado' + err)
+        alert('Jogador não cadastrado error => ' + err)
     });
 }

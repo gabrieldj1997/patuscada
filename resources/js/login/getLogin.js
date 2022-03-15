@@ -1,4 +1,9 @@
+require('../bootstrap');
 const { default: axios } = require('axios');
+
+//Urls
+const urlLogin = window.location.origin + `/login/entrar`;
+const urlGetLogin = window.location.origin + `/login/get`;
 
 const nickname = document.getElementById('nickname_input');
 const passsword = document.getElementById('password_input');
@@ -29,7 +34,7 @@ grecaptcha.ready(function () {
 let login = (token) => {
     const options = {
         method: 'POST',
-        url: window.location.origin + `/login/${nickname.value}`,
+        url: urlGetLogin,
         data: {
             nickname: nickname.value,
             password: passsword.value,
@@ -38,14 +43,15 @@ let login = (token) => {
     }
 
     axios(options).then(resp => {
+        
         if (resp.status == 200) {
             alert(`Jogador: ${resp.data.data.nickname} logado com sucesso`);
-            window.location.href = window.location.origin + '/login';
+            window.location.href = urlLogin;
             return
         }
         alert('Jogador não cadastrado');
         console.log(resp.data);
     }).catch(err => {
-        alert('Jogador não cadastrado' + err)
+        alert('Jogador não cadastrado; error => ' + err)
     });
 }

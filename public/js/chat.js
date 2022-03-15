@@ -25842,8 +25842,9 @@ var __webpack_exports__ = {};
 __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
-    axios = _require["default"]; // Enable pusher logging - don't include this in production
+    axios = _require["default"];
 
+var urlMessage = window.location.origin + '/send-message'; // Enable pusher logging - don't include this in production
 
 Pusher.logToConsole = true;
 var messages_el = document.getElementById('messages');
@@ -25870,7 +25871,7 @@ message_form.addEventListener('submit', function (e) {
 
   var options = {
     method: 'POST',
-    url: window.location.origin + '/send-message',
+    url: urlMessage,
     data: {
       username: username_input.value,
       message: message_input.value

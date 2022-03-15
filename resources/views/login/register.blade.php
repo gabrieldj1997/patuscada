@@ -11,7 +11,7 @@
     <script src="https://www.google.com/recaptcha/api.js?render={{config('recaptcha.v3.public_key')}}"></script>
 </head>
 <body>
-    <a href="{{ url('/login') }}">voltar</a>
+    <a href="{{ url('/login/entrar') }}">voltar</a>
     <form id="cadaster_form" data-grecaptcha-action="registerLogin">
         <input type="text" name="name" id="name_input" placeholder="Digite seu nome...">
         <input type="text" name="nickname" id="nickname_input" placeholder="Digite seu login...">

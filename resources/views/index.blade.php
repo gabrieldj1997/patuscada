@@ -15,7 +15,7 @@
         <ul>
             <li>
                 <a href="{{ url('/chat') }}">chat</a>
-                <a href="{{ url('/login') }}">login</a>
+                <a href="{{ url('/login/entrar') }}">login</a>
             </li>
         </ul>
     </div>

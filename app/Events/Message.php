@@ -42,4 +42,5 @@ class Message implements ShouldBroadcast
     {
         return 'message';
     }
+
 }

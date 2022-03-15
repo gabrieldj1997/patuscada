@@ -2,6 +2,8 @@ require('../bootstrap');
 
 const { default: axios } = require('axios');
 
+const urlMessage = window.location.origin+'/send-message';
+
 // Enable pusher logging - don't include this in production
 Pusher.logToConsole = true;
 
@@ -31,7 +33,7 @@ message_form.addEventListener('submit', (e) => {
 
     const options = {
         method: 'POST',
-        url: window.location.origin+'/send-message',
+        url: urlMessage,
         data: {
             username: username_input.value,
             message: message_input.value
@@ -45,6 +47,6 @@ message_form.addEventListener('submit', (e) => {
 window.Echo.channel('chat')
     .listen('.message', (e) => {
         messages_el.innerHTML += `<div class="message"><strong>${e.username}</strong>: ${e.message}</div>`;    
-    })
+    });
 
     
