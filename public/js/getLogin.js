@@ -25877,7 +25877,7 @@ var login = function login(token) {
     }
   };
   axios(options).then(function (resp) {
-    if (resp.status == 200) {
+    if (resp.data.status == 'Success') {
       alert("Jogador: ".concat(resp.data.data.nickname, " logado com sucesso"));
       window.location.href = urlLogin;
       return;

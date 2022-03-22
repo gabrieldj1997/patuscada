@@ -26,6 +26,7 @@ class ReCAPTCHAv3 implements Rule
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
             return false;
         }
+        
         return $this->getScore($response) >= config('recaptcha.v3.minimum_score');
     }
     private function getScore($response)

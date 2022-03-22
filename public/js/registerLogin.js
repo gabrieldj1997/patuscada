@@ -25840,59 +25840,6 @@ var __webpack_exports__ = {};
   !*** ./resources/js/login/registerLogin.js ***!
   \*********************************************/
 __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
-
-var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
-    axios = _require["default"]; //Urls
-
-
-var urlLogin = window.location.origin + "/login/entrar";
-var urlRegisterLogin = window.location.origin + "/login/cadastro";
-var name = document.getElementById('name_input');
-var nickname = document.getElementById('nickname_input');
-var passsword = document.getElementById('password_input');
-var email = document.getElementById('email_input');
-var grecaptchaKeyMeta = document.querySelector("meta[name='grecaptcha-key']");
-var grecaptchaKey = grecaptchaKeyMeta.getAttribute("content");
-grecaptcha.ready(function () {
-  var forms = document.querySelectorAll('form[data-grecaptcha-action]');
-  Array.from(forms).forEach(function (form) {
-    form.onsubmit = function (e) {
-      e.preventDefault();
-      var grecaptchaAction = form.getAttribute('data-grecaptcha-action');
-      grecaptcha.ready(function () {
-        grecaptcha.execute(grecaptchaKey, {
-          action: grecaptchaAction
-        }).then(registerLogin);
-      });
-    };
-  });
-});
-
-var registerLogin = function registerLogin(token) {
-  var options = {
-    method: 'POST',
-    url: urlRegisterLogin,
-    data: {
-      name: name.value,
-      nickname: nickname.value,
-      password: passsword.value,
-      email: email.value,
-      grecaptcha: token
-    }
-  };
-  axios(options).then(function (resp) {
-    if (resp.status == 200) {
-      alert(resp.data.status);
-      window.location.href = urlLogin;
-      return;
-    }
-
-    alert('Jogador não cadastrado, nickname já existe');
-    console.log(resp.dada);
-  })["catch"](function (err) {
-    alert('Jogador não cadastrado error => ' + err);
-  });
-};
 })();
 
 /******/ })()

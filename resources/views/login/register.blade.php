@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="grecaptcha-key" content="{{config('recaptcha.v3.public_key')}}">
-    
-    <title>Cadastro de jogador</title>
 
-    <script src="https://www.google.com/recaptcha/api.js?render={{config('recaptcha.v3.public_key')}}"></script>
+    <title>Cadastro de jogador</title>
+   
 </head>
+
 <body>
-    <a href="{{ url('/login/entrar') }}">voltar</a>
-    <form id="cadaster_form" data-grecaptcha-action="registerLogin">
+    @if ($errors->any())                     
+        @foreach ($errors->all() as $input_error)
+        <div class = "alert alert-error">      
+          {{ $input_error }}
+        </div>
+        @endforeach 
+    @endif
+    
+    <a href="{{ route('login.index') }}">voltar</a>
+    <form id="cadaster_form" action="{{ route('login.register') }}" method="GET">
         <input type="text" name="name" id="name_input" placeholder="Digite seu nome...">
         <input type="text" name="nickname" id="nickname_input" placeholder="Digite seu login...">
         <input type="text" name="password" id="password_input" placeholder="Digite sua senha...">

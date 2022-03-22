@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="./css/app.css">
 </head>
 <body>
-    <a href="{{ url('/login') }}">login</a>
+    <a href="{{ url('/login') }}">voltar</a>
     <div class="app">
         <header>
             <h1>Let's play</h1>
-            <input type="text" name="username" id="username" placeholder="Your username">
+            <input type="text" name="username" id="username" value="{{ $nickname }}" disabled>
         </header>
         <div id="messages"></div>
 

@@ -14,14 +14,12 @@
 <body>
     @if (Auth::check())
         <p>Ola {{ $user->nickname }}</p>
+        <a href="{{ route('login.truncate') }}">Excluir logins</a>
+        <a href="{{ url('/chat') }}">chat</a>
+        <a href="{{ route('login.logout') }}">logout</a>
     @else
         <p>Usuario não logado</p>
-    @endif
-    <a href="{{ url('/login/cadastro') }}">Cadastro</a>
-    <a href="{{ url('/login/truncate') }}">Excluir logins</a>
-    @if (Auth::check())
-    <a href="{{ url('/login/logout') }}">logout</a>
-    @else
+        <a href="{{ route('login.cadaster') }}">Cadastro</a>
         <form id="login_form" data-grecaptcha-action="login">
             <input type="text" name="nickname" id="nickname_input" placeholder="Digite seu nickname...">
             <input type="text" name="password" id="password_input" placeholder="Digite sua senha...">

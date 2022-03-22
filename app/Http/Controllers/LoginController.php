@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginFormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Rules\ReCAPTCHAv3;
@@ -13,10 +15,10 @@ use stdClass;
 
 class LoginController extends Controller
 {
+    //Front-end
     public function Index()
-    {   
-        if(!Auth::check())
-        {
+    {
+        if (!Auth::check()) {
             return view('login.login');
         }
         return view('login.login', ["user" => Auth::user()]);
@@ -25,94 +27,99 @@ class LoginController extends Controller
     {
         return view('login/register');
     }
-    public function GetLogin(Request $req)
+    //Back-end
+    public function AutenticateLogin(LoginFormRequest $req)
     {
         $nickname = $req->input('nickname');
         $password = $req->input('password');
         $remember = $req->input('remember');
         try {
-            if ($this->Logar($nickname, $password, $remember)) {
+            if (Auth::attempt(['nickname' => $req->input('nickname'), 'password' => $req->input('password')], true)) {
                 $req->session()->regenerate();
-                return redirect('login/entrar');
+                return response()->json(['status' => 'Success', 'message' => 'Usuario logado com sucesso.', 'user' => Auth::user()], 200);
             }
-            return response()->json(['status' => 'Error', 'data' => 'User not found'],204);
+            return response()->json(['status' => 'Error', 'message' => 'Nickname or Password wrong.'], 202);
         } catch (Exception $e) {
-            return response($e, 200);
+            return response()->json(['status' => 'Error', 'data' => $e], 500);
         }
     }
-    public function RegisterLogin(Request $req)
+    public function RegisterLogin(LoginFormRequest $req)
     {
-        $req->validate([
-            'nickname' => 'required',
-            'name' => 'required',
-            'password' => 'required',
-            'email' => 'required',
-            'grecaptcha' => ['required', new ReCAPTCHAv3],
-        ]);
         try {
             $login = new User();
             $login->name = $req->input('name');
             $login->nickname = $req->input('nickname');
             $login->password = Hash::make($req->input('password'));
             $login->email = $req->input('email');
-            
+
             $login->save();
 
-            self::Logar($req->input('nickname'), $req->input('password'), true);
-
-            return response()->json(['status' => 'Login cadastro com sucesso!', 'user' => $login],200);
+            if (Auth::attempt(['nickname' => $req->input('nickname'), 'password' => $req->input('password')], true)) {
+                return redirect()->route('login.index');
+            }
+            return 'falso';
         } catch (Exception $e) {
-            return response()->json(['err' => $e->getMessage()], 200);
+            return redirect()->back()->withErrors(['errors' => 'Erro no servidor, tente novamente mais tarde.', 'message' => $e], 500);
         }
     }
-    public function UpdateLogin(Request $req, $id)
+    public function UpdateLogin(LoginFormRequest $req)
     {
         try {
-            if (User::where('id', $id)->exists()) {
-                $player = User::where('id', $id)->first();
+            if (User::where('nickname', $req->input('nickname'))->exists()) {
+                $player = User::where('nickname', $req)->first();
+                if (Hash::make($req->input('password')) == $player->password) {
+                    $player = User::find($player->id);
+                    $player->nickname = is_null($req->input('nickname')) ? $player->nickname : $req->input('nickname');
+                    $player->password = is_null($req->input('password')) ? $player->password : $req->input('password');
+                    $player->email = is_null($req->input('email')) ? $player->nickname : $req->input('email');
+
+                    $player->save();
+                    return response()->json(['status' => 'Success','message'=>'Usuario alterado com sucesso', 'user' => $player], 200);
+                }
+                return response()->json(['status' => 'Error', 'message' => 'Senha incorreta.', 'user' => $req->input('nickname')], 204);
             }
-
-            if (User::where('nickname', $id)->exists()) {
-                $player = User::where('nickname', $id)->first();
-            }
-
-            $player = User::find($player->id);
-            $player->nickname = is_null($req->input('nickname')) ? $player->nickname : $req->input('nickname');
-            $player->password = is_null($req->input('password')) ? $player->password : $req->input('password');
-            $player->email = is_null($req->input('email')) ? $player->nickname : $req->input('email');
-
-            $player->save();
-
-            return response()->json(['status' => 'Login atualizado com sucesso!', 'data' => $player],200);
+            return response()->json(['status' => 'Error', 'message' => 'Usario não encontrado no sistema'], 204);
         } catch (Exception $e) {
-            return response()->json(['Erro ao atualizar o login' => $e->getMessage()], 500);
+            return redirect()->back()->withErrors(['error' => 'Erro ao atualizar o login', 'message' => $e->getMessage()], 500);
         }
     }
-    public function DeleteLogin($id)
+    public function DeleteLogin(LoginFormRequest $req)
     {
         try {
-            if (User::where('id', $id)->exists()) {
-                $player = User::where('id', $id);
+        if (User::where('nickname', $req->input('nickname'))->exists()) {
+            $player = User::where('nickname', $req)->first();
+            if (Hash::make($req->input('password')) == $player->password) {
+                $player->delete();
+                return response()->json(['status' => 'Success','message' => 'Usuario deletado com sucesso.', 'user' => $player], 200);
             }
-
-            if (User::where('nickname', $id)->exists()) {
-                $player = User::where('nickname', $id);
-            }
-            $player->delete();
-            return response()->json(['status' => 'Login deletado com sucesso!', 'data' => $player],200);
+            return response()->json(['status' => 'Error', 'message' => 'Senha incorreta.', 'user' => $req->input('nickname')], 204);
+        }
+        return response()->json(['status' => 'Error', 'message' => 'Usuario não cadastrado.', 'user' => $req->input('nickname')], 204);
         } catch (Exception $e) {
             return response()->json(['Erro ao deletar o login' => $e->getMessage()], 500);
         }
     }
     public function Truncate()
     {
+        Auth::logout();
         User::truncate();
 
         return redirect('/login/entrar');
     }
-    public function Logout(){
+    public function Logout()
+    {
         Auth::logout();
         return redirect('/login/entrar');
+    }
+    public function Captcha(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'g-recaptcha-response' => ['required', new ReCAPTCHAv3],
+        ]);
+        if($validator->fails()){
+            return response()->json(['status' => 'Error', 'message' => 'Captcha inválido.'], 202);
+        }
+        return response()->json(['status' => 'Success', 'message' => 'Captcha validado.'], 200);
     }
     /* Model Response Login
         {
@@ -125,10 +132,4 @@ class LoginController extends Controller
             }
         }
     */
-    private function Logar($nickname, $password, $remember = false){
-        if(Auth::attempt(['nickname' => $nickname, 'password' => $password], $remember)){
-            return true;
-        }
-        return false;
-    }
 }

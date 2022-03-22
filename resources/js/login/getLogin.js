@@ -44,7 +44,7 @@ let login = (token) => {
 
     axios(options).then(resp => {
         
-        if (resp.status == 200) {
+        if (resp.data.status == 'Success') {
             alert(`Jogador: ${resp.data.data.nickname} logado com sucesso`);
             window.location.href = urlLogin;
             return

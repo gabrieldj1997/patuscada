@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('codigo')->unique();
             $table->string('nome_jogo');
-            $table->string('id_estado_jogo');
+            $table->string('id_estado_jogo')->default(0);
             $table->integer('rodada')->default(0);
             $table->string('players');
             $table->timestamps();

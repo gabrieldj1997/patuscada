@@ -36,24 +36,25 @@ Route::post('/send-message', function (Request $request) {
 });
 
 Route::get('/chat', function () {
-    return view('chat');
-});
+    return view('chat.chat', ['nickname' => Auth::user()->nickname]);
+})->middleware('auth');
 
-Route::controller(LoginController::class)->prefix('login')->group(function () {
+Route::controller(LoginController::class)->prefix('login')->name('login.')->group(function () {
     //rotas front-end
-    Route::get('/', function(){return redirect('login/entrar');})->middleware('guest');
-    Route::get('/entrar', 'Index')->name('loginIndex');
-    Route::get('/cadastro', 'Register');
+    Route::get('/', function(){return redirect('/login/entrar');});
+    Route::get('/entrar', 'Index')->name('index');
+    Route::get('/cadastro', 'Register')->name('cadaster');
     //rotas back-end
-    Route::post('/cadastro', 'RegisterLogin')->name('registerLogin');
-    Route::post('/get', 'GetLogin'); 
-    Route::put('/update', 'UpdateLogin');
-    Route::delete('/delete', 'DeleteLogin');
-    Route::get('/truncate', 'Truncate');
-    Route::get('/logout', 'Logout');
+    Route::get('/cadastrar', 'RegisterLogin')->name('register');
+    Route::post('/autenticate', 'AutenticateLogin')->name('autenticate'); 
+    Route::put('/update', 'UpdateLogin')->name('update');
+    Route::delete('/delete', 'DeleteLogin')->name('delete');
+    Route::get('/truncate', 'Truncate')->name('truncate');
+    Route::get('/logout', 'Logout')->name('logout');
+    Route::post('/captcha', 'Captcha')->name('captcha');
 });
 
-Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->group(function () {
+Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->name('jogo')->group(function () {
     //rotas front-end
     Route::get('/', 'Jogo')->name('jogoIndex');
     Route::get('/criar', 'Register');
