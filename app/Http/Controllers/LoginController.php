@@ -28,19 +28,18 @@ class LoginController extends Controller
         return view('login/register');
     }
     //Back-end
-    public function AutenticateLogin(LoginFormRequest $req)
+    public function AutenticateLogin(Request $req)
     {
-        $nickname = $req->input('nickname');
-        $password = $req->input('password');
-        $remember = $req->input('remember');
         try {
             if (Auth::attempt(['nickname' => $req->input('nickname'), 'password' => $req->input('password')], true)) {
                 $req->session()->regenerate();
-                return response()->json(['status' => 'Success', 'message' => 'Usuario logado com sucesso.', 'user' => Auth::user()], 200);
+                
+                return redirect()->back()->with(['message'=> 'Usuario logado com sucesso.']);
             }
-            return response()->json(['status' => 'Error', 'message' => 'Nickname or Password wrong.'], 202);
+            return redirect()->back()->with(['message'=> 'Usuario ou Senha errado.']);
+
         } catch (Exception $e) {
-            return response()->json(['status' => 'Error', 'data' => $e], 500);
+            return redirect()->back()->with(['message'=> 'Erro no servidor.']);
         }
     }
     public function RegisterLogin(LoginFormRequest $req)

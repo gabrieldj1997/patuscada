@@ -16,6 +16,9 @@ class JogoController extends Controller
     }
     function GameOn($id){
         $jogo = Jogo::find($id);
+        if($jogo == null){
+            return response()->json(['result'=> 'Sala não achada']);
+        }
         return view('game.gameon', ['jogo' => $jogo]);
     }
     function VerifyGame($id){
