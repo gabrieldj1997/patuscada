@@ -11,14 +11,14 @@
 
 <body>
     @if (Auth::check())
-        <p>Ola {{ $user->nickname }}</p>
+        <p>Ola {{ Auth::user()->nickname}}</p>
         <a href="{{ route('login.truncate') }}">Excluir logins</a>
         <a href="{{ url('/chat') }}">chat</a>
         <a href="{{ route('login.logout') }}">logout</a>
     @else
         <p>Usuario não logado</p>
         <a href="{{ route('login.cadaster') }}">Cadastro</a>
-        <form id="login_form" data-grecaptcha-action="login" action="{{ route('login.autenticate') }}" method="post">
+        <form id="login_form" data-grecaptcha-action="login" action="{{ route('login.autenticate') }}" method="GET">
             <input type="text" name="nickname" id="nickname_input" placeholder="Digite seu nickname...">
             <input type="text" name="password" id="password_input" placeholder="Digite sua senha...">
             <button type="submit" id="login_submit">login</button>
@@ -29,5 +29,4 @@
     <span id="messages">{{ Session::get('message') }}</span>
     @endif
 </body>
-<script src="{{ url('./js/getLogin.js') }}"></script>
 </html>

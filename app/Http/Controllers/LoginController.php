@@ -34,12 +34,12 @@ class LoginController extends Controller
             if (Auth::attempt(['nickname' => $req->input('nickname'), 'password' => $req->input('password')], true)) {
                 $req->session()->regenerate();
                 
-                return redirect()->back()->with(['message'=> 'Usuario logado com sucesso.']);
+                return redirect()->route('login.index')->with(['message'=> 'Usuario logado com sucesso.']);
             }
-            return redirect()->back()->with(['message'=> 'Usuario ou Senha errado.']);
+            return redirect()->route('login.index')->with(['message'=> 'Usuario ou Senha errado.']);
 
         } catch (Exception $e) {
-            return redirect()->back()->with(['message'=> 'Erro no servidor.']);
+            return redirect()->route('login.index')->with(['message'=> 'Erro no servidor.']);
         }
     }
     public function RegisterLogin(LoginFormRequest $req)

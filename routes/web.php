@@ -46,7 +46,7 @@ Route::controller(LoginController::class)->prefix('login')->name('login.')->grou
     Route::get('/cadastro', 'Register')->name('cadaster');
     //rotas back-end
     Route::get('/cadastrar', 'RegisterLogin')->name('register');
-    Route::post('/autenticate', 'AutenticateLogin')->name('autenticate'); 
+    Route::get('/autenticate', 'AutenticateLogin')->name('autenticate'); 
     Route::put('/update', 'UpdateLogin')->name('update');
     Route::delete('/delete', 'DeleteLogin')->name('delete');
     Route::get('/truncate', 'Truncate')->name('truncate');
