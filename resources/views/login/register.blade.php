@@ -20,7 +20,8 @@
     @endif
     
     <a href="{{ route('login.index') }}">voltar</a>
-    <form id="cadaster_form" action="{{ route('login.register') }}" method="GET">
+    <form id="cadaster_form" action="{{ route('login.register') }}" method="POST">
+        @csrf
         <input type="text" name="name" id="name_input" placeholder="Digite seu nome...">
         <input type="text" name="nickname" id="nickname_input" placeholder="Digite seu login...">
         <input type="text" name="password" id="password_input" placeholder="Digite sua senha...">

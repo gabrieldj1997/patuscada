@@ -18,10 +18,7 @@ class LoginController extends Controller
     //Front-end
     public function Index()
     {
-        if (!Auth::check()) {
-            return view('login.login');
-        }
-        return view('login.login', ["user" => Auth::user()]);
+        return view('login.login');
     }
     public function Register()
     {
@@ -32,14 +29,11 @@ class LoginController extends Controller
     {
         try {
             if (Auth::attempt(['nickname' => $req->input('nickname'), 'password' => $req->input('password')], true)) {
-                $req->session()->regenerate();
-                
-                return redirect()->route('login.index')->with(['message'=> 'Usuario logado com sucesso.']);
+                return view('login.login', ['message' => 'Login efetuado com sucesso.']);
             }
-            return redirect()->route('login.index')->with(['message'=> 'Usuario ou Senha errado.']);
-
+            return view('login.login', ['message' => 'Usuario ou senha invalidos.']);
         } catch (Exception $e) {
-            return redirect()->route('login.index')->with(['message'=> 'Erro no servidor.']);
+            return view('login.login', ['message' => 'Erro no servidor. ' . $e->getMessage()]);
         }
     }
     public function RegisterLogin(LoginFormRequest $req)
@@ -56,7 +50,7 @@ class LoginController extends Controller
             if (Auth::attempt(['nickname' => $req->input('nickname'), 'password' => $req->input('password')], true)) {
                 return redirect()->route('login.index');
             }
-            return 'falso';
+            return redirect()->back();
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['errors' => 'Erro no servidor, tente novamente mais tarde.', 'message' => $e], 500);
         }
@@ -73,7 +67,7 @@ class LoginController extends Controller
                     $player->email = is_null($req->input('email')) ? $player->nickname : $req->input('email');
 
                     $player->save();
-                    return response()->json(['status' => 'Success','message'=>'Usuario alterado com sucesso', 'user' => $player], 200);
+                    return response()->json(['status' => 'Success', 'message' => 'Usuario alterado com sucesso', 'user' => $player], 200);
                 }
                 return response()->json(['status' => 'Error', 'message' => 'Senha incorreta.', 'user' => $req->input('nickname')], 204);
             }
@@ -82,20 +76,30 @@ class LoginController extends Controller
             return redirect()->back()->withErrors(['error' => 'Erro ao atualizar o login', 'message' => $e->getMessage()], 500);
         }
     }
-    public function DeleteLogin(LoginFormRequest $req)
+    public function DeleteLogin(LoginFormRequest $req, $id)
     {
-        try {
-        if (User::where('nickname', $req->input('nickname'))->exists()) {
-            $player = User::where('nickname', $req)->first();
-            if (Hash::make($req->input('password')) == $player->password) {
-                $player->delete();
-                return response()->json(['status' => 'Success','message' => 'Usuario deletado com sucesso.', 'user' => $player], 200);
+        if (Auth::check()) {
+            if(Auth::user()->id == $id){
+                return redirect()->back()->with(['message' => 'Não é possivel deletar outro usuario.']);
             }
-            return response()->json(['status' => 'Error', 'message' => 'Senha incorreta.', 'user' => $req->input('nickname')], 204);
-        }
-        return response()->json(['status' => 'Error', 'message' => 'Usuario não cadastrado.', 'user' => $req->input('nickname')], 204);
-        } catch (Exception $e) {
-            return response()->json(['Erro ao deletar o login' => $e->getMessage()], 500);
+            try {
+                $player = User::find($id);
+                Auth::logout();
+                $player->delete();
+                return redirect()->back()->with(['message' => 'Usuario deletado com sucesso.']);
+
+            } catch (Exception $e) {
+                return redirect()->back()->with(['message' => 'Error no servidor. '. $e->getMessage()]);
+            }
+        } else {
+            
+            $player = User::find()->where('id', $id)->where('password', Hash::make($req->input('password')))->first();
+            if(isset($player)){
+                $player->delete();
+                return redirect()->back()->with(['message' => 'Usuario deletado com sucesso.']);
+            }
+            return redirect()->back()->with(['message' => 'Usuario ou senha invalidos, usuario de id '.$id.' não encontrado.']);        
+            
         }
     }
     public function Truncate()
@@ -115,20 +119,9 @@ class LoginController extends Controller
         $validator = Validator::make($req->all(), [
             'g-recaptcha-response' => ['required', new ReCAPTCHAv3],
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json(['status' => 'Error', 'message' => 'Captcha inválido.'], 202);
         }
         return response()->json(['status' => 'Success', 'message' => 'Captcha validado.'], 200);
     }
-    /* Model Response Login
-        {
-            status: 'description of status of request',
-            data: {
-                id: 'id of player',
-                nickname: 'nickname of player',
-                email: 'email of player',
-                password: 'password of player'
-            }
-        }
-    */
 }
