@@ -22,7 +22,7 @@ use GuzzleHttp\Middleware;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('index');
 
 Route::post('/send-message', function (Request $request) {
     event(
@@ -41,14 +41,13 @@ Route::get('/chat', function () {
 
 Route::controller(LoginController::class)->prefix('login')->name('login.')->group(function () {
     //rotas front-end
-    Route::get('/', function(){return redirect('/login/entrar');});
     Route::get('/entrar', 'Index')->name('index');
     Route::get('/cadastro', 'Register')->name('cadaster');
     //rotas back-end
     Route::post('/cadastrar', 'RegisterLogin')->name('register');
     Route::post('/autenticate', 'AutenticateLogin')->name('autenticate'); 
     Route::put('/update', 'UpdateLogin')->name('update');
-    Route::delete('/delete/{id}', 'DeleteLogin')->name('delete');
+    Route::post('/delete/{id}', 'DeleteLogin')->name('delete');
     Route::get('/truncate', 'Truncate')->name('truncate');
     Route::get('/logout', 'Logout')->name('logout');
     Route::post('/captcha', 'Captcha')->name('captcha');
