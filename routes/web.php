@@ -27,7 +27,7 @@ Route::get('/', function () {
 Route::post('/send-message', function (Request $request) {
     event(
         new Message(
-            $request->input('username'),
+            $request->input('nickname'),
             $request->input('message')
         )
     );

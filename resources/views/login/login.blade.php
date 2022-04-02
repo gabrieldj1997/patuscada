@@ -14,7 +14,7 @@ if (Session::has('error')) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Patuscada v.Dj1997</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ url(mix('css/app.css')) }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 </head>
 
@@ -22,8 +22,7 @@ if (Session::has('error')) {
     <div class="container">
         @if (Auth::check())
             <h2>Ola <strong>{{ Auth::user()->nickname }}</strong> </h2>
-            <button type="button" class="btn btn-primary"
-                onclick="window.location='{{ route('login.truncate') }}'">Deletar todos logins</button>
+            <button type="button" class="btn btn-primary" onclick="window.location='{{ route('login.truncate') }}'">Deletar todos logins</button>
             <button type="button" class="btn btn-primary" onclick="window.location='{{ route('chat') }}'">chat</button>
             <button type="button" class="btn btn-primary"
                 onclick="window.location='{{ route('login.logout') }}'">logout</button>

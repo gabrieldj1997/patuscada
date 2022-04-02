@@ -11,6 +11,16 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js([
+        'resources/js/app.js'
+    ], 'public/js/app.js')
+    .js([
+        'resources/js/chat/chat.js'
+    ], 'public/js/chat.js')
+    .styles([
+        'resources/css/app.css',
+        'resources/css/chat.css',
+    ], 'public/css/style.css')
     .sass('resources/sass/app.scss', 'public/css')
-    .sourceMaps();
+    .sourceMaps()
+    .version();
