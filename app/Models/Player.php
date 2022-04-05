@@ -13,7 +13,9 @@ class Player extends Model
         'nickname',
         'password',
         'email',
-        'pontuacao'
+        'api_token',
+        'pontuacao',
+        'status'
     ];
 
     protected $hidden = [

@@ -12,6 +12,7 @@ use App\Rules\ReCAPTCHAv3;
 use Illuminate\Support\Facades\Redirect;
 use Exception;
 use stdClass;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class LoginController extends Controller
 {
@@ -44,7 +45,6 @@ class LoginController extends Controller
             $login->nickname = $req->input('nickname');
             $login->password = Hash::make($req->input('password'));
             $login->email = $req->input('email');
-
             $login->save();
 
             if (Auth::attempt(['nickname' => $req->input('nickname'), 'password' => $req->input('password')], true)) {
@@ -53,6 +53,15 @@ class LoginController extends Controller
             return redirect()->back();
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['errors' => 'Erro no servidor, tente novamente mais tarde.', 'message' => $e], 500);
+        }
+    }
+    public function UsersOnline(Request $req)
+    {
+        try {
+            $users = User::where('status', 'online')->get();
+            return response($users, 200);
+        } catch (Exception $e) {
+            return response($e->getMessage(),200);
         }
     }
     public function UpdateLogin(LoginFormRequest $req)

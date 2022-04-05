@@ -14,5 +14,10 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('App.Models.Player.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+  return (int) $user->id === (int) $id;
+});
+
+
+Broadcast::channel('App.Chatroom', function ($user) {
+  return $user;
 });

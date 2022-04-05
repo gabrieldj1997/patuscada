@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="APP_KEY" content="{{ config('broadcasting.connections.pusher.key') }}" />
 
     <title>Patuscada</title>
 
@@ -27,16 +29,21 @@
             </div>
         </div>
         <div class="chat-section col-12">
-            <div id="messages"></div>
+            <div id="users-online" class="col-2">
+                <h4>Usuarios online</h4>
+                <ul id="users-online-list"></ul>
+            </div>
+            <div id="messages" class="col-10"></div>
         </div>
         <div class="chat-footer col-12">
             <div class="row chat-form">
                 <div class="d-flex justify-content-center">
                     <form id="message_form">
                         <div class="d-flex justify-content-between">
-                        <input type="text" name="message" id="message_input" placeholder="Your message">
-                        <input type="text" name="nickname" id="nickname_input" hidden value="{{ Auth::user()->nickname }}">
-                        <button type="submit" class="btn btn-primary" id="message_send">Enviar</button>
+                            <input type="text" name="message" id="message_input" placeholder="Your message">
+                            <input type="text" name="nickname" id="nickname_input" hidden
+                                value="{{ Auth::user()->nickname }}">
+                            <button type="submit" class="btn btn-primary" id="message_send">Enviar</button>
                         </div>
                     </form>
                 </div>
@@ -47,5 +54,6 @@
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
 <script src="{{ url(mix('js/chat.js')) }}"></script>
+
 
 </html>
