@@ -5,7 +5,7 @@ const { default: axios } = require('axios');
 const urlMessage = window.location.origin + '/send-message';
 
 // Enable pusher logging - don't include this in production
-//Pusher.logToConsole = true;
+// Pusher.logToConsole = true;
 
 const nickname_input = document.getElementById('nickname_input');
 const messages_el = document.getElementById('messages');
@@ -44,33 +44,50 @@ message_form.addEventListener('submit', (e) => {
 
 window.Echo.channel('chat')
     .listen('.message', (e) => {
-        if (e.nickname != nickname_input.value) {
+        if (e.nickname == nickname_input.value) {
             messages_el.innerHTML += `<div class="self-messages messages"><strong>você</strong>: <div class="message-text">${e.message}</div></div>`;
+        } else {
+            messages_el.innerHTML += `<div class="others-messages messages"><strong>${e.nickname}</strong>: <div class="message-text">${e.message}</div></div>`;
         }
         messages_el.scrollTop = messages_el.scrollHeight;
     });
 
 window.Echo.join('App.Chatroom', (data) => { console.log(data) })
     .joining((user) => {
+        console.log("usuario online ==> ",user);
         axios.put('/api/user/' + user.id + '/online?api_token=' + user.api_token, {});
     }).leaving((user) => {
+        console.log("usuario offline ==> ",user);
         axios.put('/api/user/' + user.id + '/offline?api_token=' + user.api_token, {});
     }).listen('UserOnline', (e) => {
+        console.log("usuario online EVENTO ==> ",e);
         if (e.user.nickname != nickname_input.value) {
-            users_list.innerHTML += `<li class="user-${e.user.nickname}"><strong>${e.user.nickname}</strong></li>`;
+            let element = document.getElementsByClassName(`user-${e.user.nickname}`);
+            if (element.length == 0) {
+                users_list.innerHTML += `<li class="user-${e.user.nickname}"><strong>${e.user.nickname}</strong></li>`;
+            }
         }
     }).listen('UserOffline', (e) => {
+        console.log("usuario offline EVENTO ==> ",e);
         if (e.user.nickname != nickname_input.value) {
-            try {
+            try{
                 document.querySelector(`.user-${e.user.nickname}`).remove();
-            } catch (e) { }
+            }catch(e){
+
+            }
         }
     });
 
 axios.get('/login/users-online').then(data => {
+    console.log(data.data)
     data.data.forEach(element => {
-        if(element.nickname != nickname_input.value) {
+        if (element.nickname != nickname_input.value) {
+            try{
+                document.querySelector(`.user-${element.nickname}`).remove();
+            }catch(e){
+
+            }
             users_list.innerHTML += `<li class="user-${element.nickname}"><strong>${element.nickname}</strong></li>`;
         }
     });
- })
+})

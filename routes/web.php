@@ -8,6 +8,7 @@ use App\Events\Message;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\JogoController;
 use GuzzleHttp\Middleware;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,10 @@ Route::post('/send-message', function (Request $request) {
 });
 
 Route::get('/chat', function () {
+    $user = Auth::user()->id;
+    $user = User::find($user);
+    $user->status = 'online';
+    $user->save();
     return view('chat.chat');
 })->middleware('auth')->name('chat');
 
