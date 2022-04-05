@@ -47,20 +47,17 @@ window.Echo.channel('chat')
         if (e.nickname == nickname_input.value) {
             messages_el.innerHTML += `<div class="self-messages messages"><strong>você</strong>: <div class="message-text">${e.message}</div></div>`;
         } else {
-            messages_el.innerHTML += `<div class="others-messages messages"><strong>${e.nickname}</strong>: <div class="message-text">${e.message}</div></div>`;
+            messages_el.innerHTML += `<div class="other-messages messages"><strong>${e.nickname}</strong>: <div class="message-text">${e.message}</div></div>`;
         }
         messages_el.scrollTop = messages_el.scrollHeight;
     });
 
-window.Echo.join('App.Chatroom', (data) => { console.log(data) })
+window.Echo.join('App.Chatroom')
     .joining((user) => {
-        console.log("usuario online ==> ",user);
         axios.put('/api/user/' + user.id + '/online?api_token=' + user.api_token, {});
     }).leaving((user) => {
-        console.log("usuario offline ==> ",user);
         axios.put('/api/user/' + user.id + '/offline?api_token=' + user.api_token, {});
     }).listen('UserOnline', (e) => {
-        console.log("usuario online EVENTO ==> ",e);
         if (e.user.nickname != nickname_input.value) {
             let element = document.getElementsByClassName(`user-${e.user.nickname}`);
             if (element.length == 0) {
@@ -68,26 +65,27 @@ window.Echo.join('App.Chatroom', (data) => { console.log(data) })
             }
         }
     }).listen('UserOffline', (e) => {
-        console.log("usuario offline EVENTO ==> ",e);
         if (e.user.nickname != nickname_input.value) {
-            try{
+            try {
                 document.querySelector(`.user-${e.user.nickname}`).remove();
-            }catch(e){
+            } catch (e) {
 
             }
         }
-    });
-
-axios.get('/login/users-online').then(data => {
-    console.log(data.data)
-    data.data.forEach(element => {
-        if (element.nickname != nickname_input.value) {
-            try{
-                document.querySelector(`.user-${element.nickname}`).remove();
-            }catch(e){
-
+    }).listen('.pusher:subscription_succeeded', (membros) => {
+        axios.get('/login/users-online').then(resp => {
+            resp.data.forEach(user => {
+                usuario = membros.members[user.id];
+                if(usuario == null){
+                    console.log('mudando status', user.nickname, 'para offline')
+                    axios.put('/api/user/' + user.id + '/offline?api_token=' + user.api_token, {})
+                }
+            });
+        })
+        
+        Object.keys(membros.members).forEach(id => {
+            if (membros.members[id].nickname != nickname_input.value) {
+                users_list.innerHTML += `<li class="user-${membros.members[id].nickname}"><strong>${membros.members[id].nickname}</strong></li>`;
             }
-            users_list.innerHTML += `<li class="user-${element.nickname}"><strong>${element.nickname}</strong></li>`;
-        }
+        })
     });
-})

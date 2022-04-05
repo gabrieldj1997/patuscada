@@ -41,7 +41,7 @@
                     <form id="message_form">
                         <div class="d-flex justify-content-between">
                             <input type="text" name="message" id="message_input" placeholder="Your message">
-                            <input type="text" name="nickname" id="nickname_input" value="{{ Auth::user()->nickname }}">
+                            <input type="text" name="nickname" id="nickname_input" value="{{ Auth::user()->nickname }}" hidden>
                             <button type="submit" class="btn btn-primary" id="message_send">Enviar</button>
                         </div>
                     </form>
