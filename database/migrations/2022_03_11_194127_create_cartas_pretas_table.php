@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('texto');
             $table->string('id_pack')->default(1);
-            $table->string('pontos');
+            $table->string('pontos')->default(0);
             $table->timestamps();
         });
     }

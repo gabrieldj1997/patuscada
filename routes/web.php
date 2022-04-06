@@ -59,7 +59,7 @@ Route::controller(LoginController::class)->prefix('login')->name('login.')->grou
     Route::post('/captcha', 'Captcha')->name('captcha');
 });
 
-Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->name('jogo')->group(function () {
+Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->name('jogo.')->group(function () {
     //rotas front-end
     Route::get('/', 'Jogo')->name('jogoIndex');
     Route::get('/criar', 'Register');
@@ -69,6 +69,7 @@ Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->na
     Route::post('/criar', 'RegisterGame');
     Route::post('/resetar/{id}', 'ResetGame');
 });
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\UserOnlineController;
-use App\Http\Controllers\UserOfflineController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartasBrancasController;
+use App\Http\Controllers\CartasPretasController;
+use App\Http\Controllers\UserOfflineController;
+use App\Http\Controllers\UserOnlineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +24,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::put('user/{user}/online', UserOnlineController::class);
 Route::put('user/{user}/offline', UserOfflineController::class);
+
+Route::controller(CartasPretasController::class)->prefix('cartaspretas')->name('cartaspretas.')->group(function(){
+    Route::get('/', 'GetCartasPretas')->name('getall');
+    Route::get('/{id}', 'GetCartaPreta')->name('get');
+    Route::post('/', 'RegisterCartaPreta')->name('register');
+    Route::put('/{id}', 'AlterCartaPreta')->name('alter');
+});
+
+Route::controller(CartasBrancasController::class)->prefix('cartasbrancas')->name('cartasbrancas.')->group(function(){
+    Route::get('/', 'GetCartasBrancas')->name('getall');
+    Route::get('/{id}', 'GetCartaBranca')->name('get');
+    Route::post('/', 'RegisterCartaBranca')->name('register');
+    Route::put('/{id}', 'AlterCartaBranca')->name('alter');
+});
