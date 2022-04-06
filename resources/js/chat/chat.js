@@ -73,6 +73,7 @@ window.Echo.join('App.Chatroom')
             }
         }
     }).listen('.pusher:subscription_succeeded', (membros) => {
+        axios.put('/api/user/' + membros.me.id + '/online?api_token=' + membros.me.api_token, {});
         axios.get('/login/users-online').then(resp => {
             resp.data.forEach(user => {
                 usuario = membros.members[user.id];
