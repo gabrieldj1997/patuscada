@@ -22,7 +22,8 @@ if (Session::has('error')) {
     <div class="container">
         @if (Auth::check())
             <h2>Ola <strong>{{ Auth::user()->nickname }}</strong> </h2>
-            <button type="button" class="btn btn-primary" onclick="window.location='{{ route('login.truncate') }}'">Deletar todos logins</button>
+            <button type="button" class="btn btn-primary"
+                onclick="window.location='{{ route('login.truncate') }}'">Deletar todos logins</button>
             <button type="button" class="btn btn-primary" onclick="window.location='{{ route('chat') }}'">chat</button>
             <button type="button" class="btn btn-primary"
                 onclick="window.location='{{ route('login.logout') }}'">logout</button>
@@ -54,6 +55,35 @@ if (Session::has('error')) {
                     </div>
                 </div>
             </div>
+            <button id="button-modal-game" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-game">Criar
+                jogo</button>
+            <div id="modal-game" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Criar Sala de Jogo</h5>
+                            <button type="button" class="btn btn-primary" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form_game" action="{{ route('jogo.register') }}" method="POST">
+                                @csrf
+                                <div class="row">
+                                    <label for="input-codigo">Codigo do sala: (max 5 caracter)</label>
+                                    <input type="text" id="input-codigo" name="codigo">
+                                    <label for="input-name-game">Nome da sala:</label>
+                                    <input type="text" id="input-name-game" name="nome_jogo">
+                                    <button type="submit" class="btn btn-primary" form="form_game">Criar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
         @else
             <h2>Usuario não logado</h2>
             <button type="button" class="btn btn-primary"
@@ -67,7 +97,7 @@ if (Session::has('error')) {
             </form>
         @endif
         <button type="button" class="btn btn-primary"
-        onclick="window.location='{{ route('index') }}'">voltar</button>
+            onclick="window.location='{{ route('index') }}'">voltar</button>
         @if (isset($message))
             <div class="alert alert-success">
                 {{ $message }}
@@ -85,5 +115,14 @@ if (Session::has('error')) {
 integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+<script>
+    document.querySelector('#button-modal-game').onclick = () =>{
+    document.querySelector('#input-codigo').value = ''
+    let codigo = ''
+    for(i = 0; i < 5; i++){
+        codigo += String.fromCharCode(Math.floor((Math.random()*26)+65))
+    }
+    document.querySelector('#input-codigo').value = codigo
+}
+</script>
 </html>

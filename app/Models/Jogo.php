@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jogo extends Model
 {
-    protected $table = 'tb_jogo';
+    protected $table = 'tb_jogos';
 
     protected $fillable = [
         'codigo', 
         'nome_jogo',
         'id_estado_jogo',
         'rodada',
-        'players'];
+        'user_master'];
 }

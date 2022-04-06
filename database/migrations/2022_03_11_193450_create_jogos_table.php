@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nome_jogo');
             $table->string('id_estado_jogo')->default(0);
             $table->integer('rodada')->default(0);
-            $table->string('players');
+            $table->integer('user_master')->nullable();
             $table->timestamps();
         });
     }

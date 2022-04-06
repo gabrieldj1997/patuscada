@@ -56,14 +56,8 @@ Route::controller(LoginController::class)->prefix('login')->name('login.')->grou
 });
 
 Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->name('jogo.')->group(function () {
-    //rotas front-end
-    Route::get('/', 'Jogo')->name('jogoIndex');
-    Route::get('/criar', 'Register');
-    Route::get('/partida/{id}', 'GameOn');
-    //rotas back-end
-    Route::post('/partida/{id}', 'VerifyGame');
-    Route::post('/criar', 'RegisterGame');
-    Route::post('/resetar/{id}', 'ResetGame');
+    Route::get('/', 'Index')->name('index');
+    Route::post('/register', 'RegisterGame')->name('register');
 });
 
 Auth::routes();
