@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tb_cartas_brancas', function (Blueprint $table) {
             $table->id();
             $table->string('texto');
-            $table->string('id_pack');
+            $table->string('id_pack')->default(1);
             $table->string('pontos');
             $table->timestamps();
         });
