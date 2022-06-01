@@ -14,5 +14,9 @@ class Rodadas extends Model
         'rodada', 
         'id_estado_rodada',
         'id_jogador_mestre',
+        'jogadores',//id,nome,pontuacao
+        'cartas_jogador',//id_jogadore,id_carta
+        'cartas_monte',
+        'cartas_descartardas'
         ];
 }

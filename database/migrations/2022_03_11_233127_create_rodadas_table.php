@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('rodada');
             $table->string('id_estado_rodada');
             $table->string('id_jogador_mestre');
+            $table->string('jogadores');
+            $table->string('cartas_jogador');
+            $table->string('cartas_monte');
+            $table->string('cartas_descartardas');
             $table->timestamps();
         });
     }
