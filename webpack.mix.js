@@ -16,7 +16,10 @@ mix.js([
     ], 'public/js/app.js')
     .js([
         'resources/js/chat/chat.js'
-    ], 'public/js/chat.js')
+    ], 'public/js/chat.js').
+    js([
+        'resources/js/game/jogo.js'
+    ], 'public/js/jogo.js')
     .styles([
         'resources/css/app.css',
         'resources/css/chat.css',

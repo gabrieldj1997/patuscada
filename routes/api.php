@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartasBrancasController;
 use App\Http\Controllers\CartasPretasController;
+use App\Http\Controllers\JogoController;
 use App\Http\Controllers\UserOfflineController;
 use App\Http\Controllers\UserOnlineController;
 
@@ -37,4 +38,9 @@ Route::controller(CartasBrancasController::class)->prefix('cartasbrancas')->name
     Route::get('/{id}', 'GetCartaBranca')->name('get');
     Route::post('/', 'RegisterCartaBranca')->name('register');
     Route::put('/{id}', 'AlterCartaBranca')->name('alter');
+});
+
+Route::controller(JogoController::class)->prefix('jogoApi')->name('jogoApi.')->group(function(){
+    Route::get('/{id}', 'GetJogo')->name('get');
+    Route::get('/find/{codigo}', 'FindPartida')->name('findPartida');
 });

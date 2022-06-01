@@ -21,3 +21,7 @@ Broadcast::channel('App.Models.Player.{id}', function ($user, $id) {
 Broadcast::channel('App.Chatroom', function ($user) {
   return $user;
 });
+
+Broadcast::channel('App.game-{id}', function ($user) {
+  return $user;
+});

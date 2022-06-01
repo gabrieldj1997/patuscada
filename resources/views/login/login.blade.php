@@ -84,6 +84,30 @@ if (Session::has('error')) {
                     </div>
                 </div>
             </div>
+            <button id="button-modal-game" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-game-enter">Entrar no
+                jogo</button>
+            <div id="modal-game-enter" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Entrar Sala de Jogo</h5>
+                            <button type="button" class="btn btn-primary" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                                <div class="row">
+                                    <label for="input-codigo_enter">Codigo do sala:</label>
+                                    <input type="text" id="input-codigo_enter" name="codigo_enter">
+                                    <a class="btn btn-primary" id="button_game_enter">Entrar</a>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
         @else
             <h2>Usuario não logado</h2>
             <button type="button" class="btn btn-primary"
@@ -123,6 +147,25 @@ integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCm
         codigo += String.fromCharCode(Math.floor((Math.random()*26)+65))
     }
     document.querySelector('#input-codigo').value = codigo
-}
+    }
+    document.querySelector('#button_game_enter').onclick = () =>{
+        codigo = document.querySelector('#input-codigo_enter').value
+        req = new XMLHttpRequest();
+        req.open('GET', document.location.origin+"/api/jogoApi/find/"+codigo);
+        req.onload = function(){
+            game = JSON.parse(this.response)
+            if(game.id === undefined){
+                alert('Nenhum jogo encontrado')
+            }else{
+                if(game.id_estado_jogo != 0){
+                    alert('Jogo já iniciado ou encerrado')
+                }else{
+                    document.location.href = location.origin+"/jogo/partida/"+game.id
+                }
+            }
+            
+        }
+        req.send();
+    }
 </script>
 </html>
