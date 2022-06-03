@@ -3,12 +3,11 @@ require('../bootstrap');
 const { default: axios } = require('axios');
 const users_list = document.querySelector('#jogadores');
 const gameId = document.location.pathname.split('/')[3];
-var jogo;
-try{
-    axios.get(`/api/jogoApi/${gameId}`).then(response => {
-    jogo = response.data
-})
-}catch(e){
+try {
+    axios.get(`/api/jogoApi/${gameId}`).then(res => {
+
+    });   
+} catch (e) {
     alert('erro de conexão com o servidor')
 }
 
@@ -32,22 +31,25 @@ try{
 //         }
 //         messages_el.scrollTop = messages_el.scrollHeight;
 //     });
-
 window.Echo.join('App.game-' + gameId)
     .joining((user) => {
         console.log('joining: ', user);
         axios.put('/api/user/' + user.id + '/online?api_token=' + user.api_token, {});
+        let element = document.getElementsByClassName(`user-${user.nickname}`);
+        if (element.length == 0) {
+            users_list.innerHTML += `<li class="user-${user.nickname}"><strong>${user.nickname}</strong></li>`;
+        }
     }).leaving((user) => {
         console.log('leaving: ', user);
         axios.put('/api/user/' + user.id + '/offline?api_token=' + user.api_token, {});
+        document.querySelector(`.user-${user.nickname}`).remove();
     }).listen('UserOnline', (e) => {
         console.log('UserOnline: ', e);
-        if (e.user.nickname != nickname_input.value) {
-            let element = document.getElementsByClassName(`user-${e.user.nickname}`);
-            if (element.length == 0) {
-                users_list.innerHTML += `<li class="user-${e.user.nickname}"><strong>${e.user.nickname}</strong></li>`;
-            }
+        let element = document.getElementsByClassName(`user-${e.user.nickname}`);
+        if (element.length == 0) {
+            users_list.innerHTML += `<li class="user-${e.user.nickname}"><strong>${e.user.nickname}</strong></li>`;
         }
+
     }).listen('UserOffline', (e) => {
         console.log('UserOffline: ', e);
         if (e.user.nickname != nickname_input.value) {
@@ -70,9 +72,7 @@ window.Echo.join('App.game-' + gameId)
             });
         })
 
-        // Object.keys(membros.members).forEach(id => {
-        //     if (membros.members[id].nickname != nickname_input.value) {
-        //         users_list.innerHTML += `<li class="user-${membros.members[id].nickname}"><strong>${membros.members[id].nickname}</strong></li>`;
-        //     }
-        // })
+        Object.keys(membros.members).forEach(id => {
+            users_list.innerHTML += `<li class="user-${membros.members[id].nickname}"><strong>${membros.members[id].nickname}</strong></li>`;
+        })
     });

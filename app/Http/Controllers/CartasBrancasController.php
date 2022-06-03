@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class CartasBrancasController extends Controller
 {
+    
     public function GetCartasBrancas(){
         $cartasBrancas = CartasBrancas::all();
         return $cartasBrancas;

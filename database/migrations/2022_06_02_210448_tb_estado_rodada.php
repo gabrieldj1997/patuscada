@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_cartas_pretas', function (Blueprint $table) {
-            $table->id();
-            $table->string('texto');
-            $table->integer('id_pack')->default(1);
-            $table->integer('pontos')->default(0);
-            $table->timestamps();
+        Schema::create('tb_estado_rodada', function (Blueprint $table) {
+            $table->string('id_estado_rodada');
+            $table->string('descricao_estado_rodada');
         });
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_cartas_pretas');
+        Schema::dropIfExists('tb_estado_rodada');
     }
 };

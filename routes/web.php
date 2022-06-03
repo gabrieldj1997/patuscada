@@ -59,6 +59,7 @@ Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->na
     Route::get('/', 'Index')->name('index');
     Route::post('/register', 'RegisterGame')->name('register');
     Route::get('/partida/{id}', 'Partida')->name('partida');
+    Route::post('/partida/{id}/iniciar', 'IniciarPartida')->name('iniciarPartida');
 });
 
 Auth::routes();

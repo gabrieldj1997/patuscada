@@ -10,7 +10,9 @@
      
     <h1>Jogo {{ $jogo->id }}</h1>
     <h2>{{ $jogo->nome_jogo }}</h2>
+    <h2>{{ $jogo->codigo }}</h2>
     <h3 id="estadoJogo">{{ $jogo->id_estado_jogo }}</h3>
+    <button class="btn btn-primary" id="btn-iniciar">Iniciar Partida</button>
     <div id="container">
         <div id="aba-1">
 

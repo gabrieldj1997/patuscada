@@ -10,9 +10,11 @@ class Jogo extends Model
     protected $table = 'tb_jogos';
 
     protected $fillable = [
-        'codigo', 
+        'codigo',
         'nome_jogo',
         'id_estado_jogo',
         'rodada',
-        'user_master'];
+        'user_master',
+        'jogadores'
+    ];
 }

@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_player', function (Blueprint $table) {
-            $table->id();
-            $table->string('nickname')->unique();
-            $table->string('password');
-            $table->rememberToken();
-            $table->string('email')->unique();
-            $table->integer('pontuacao')->default(0);
-            $table->timestamps();
+        Schema::create('tb_estado_jogo', function (Blueprint $table) {
+            $table->string('id_estado_jogo');
+            $table->string('descricao_estado_jogo');
         });
     }
 
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_player');
+        Schema::dropIfExists('tb_estado_jogo');
     }
 };

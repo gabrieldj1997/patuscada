@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('id_estado_jogo')->default(0);
             $table->integer('rodada')->default(0);
             $table->integer('user_master')->nullable();
+            $table->string('jogadores');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jogos');
+        Schema::dropIfExists('tb_jogos');
     }
 };
