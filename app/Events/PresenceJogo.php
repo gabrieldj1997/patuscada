@@ -10,35 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageJogo implements ShouldBroadcast
+class PresenceJogo
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $jogoId;
-    public $data;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct( $jogoId, $data)
+
+    public function __construct($jogoId)
     {
         $this->jogoId = $jogoId;
-        $this->data = $data;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
     public function broadcastOn()
     {
-        return new Channel('jogo-message-'.$this->jogoId);
-    }
-
-    public function broadcastAs()
-    {
-        return 'message';
+        return new PresenceChannel('App.jogo-', $this->jogoId);
     }
 }

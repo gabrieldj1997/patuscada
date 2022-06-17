@@ -1,57 +1,37 @@
+//Config
 require('../bootstrap');
 
-// window.Echo.channel('chat')
-//     .listen('.message', (e) => {
-//         if (e.nickname == nickname_input.value) {
-//             messages_el.innerHTML += `<div class="self-messages messages"><strong>você</strong>: <div class="message-text">${e.message}</div></div>`;
-//         } else {
-//             messages_el.innerHTML += `<div class="other-messages messages"><strong>${e.nickname}</strong>: <div class="message-text">${e.message}</div></div>`;
-//         }
-//         messages_el.scrollTop = messages_el.scrollHeight;
-//     });
+const { default: axios } = require('axios');
 
-window.Echo.join('App.game-' + gameId)
-    .joining((user) => {
-        console.log('joining: ', user);
-        axios.put('/api/user/' + user.id + '/online?api_token=' + user.api_token, {});
-        let element = document.getElementsByClassName(`user-${user.nickname}`);
-        if (element.length == 0) {
-            users_list.innerHTML += `<li class="user-${user.nickname}"><strong>${user.nickname}</strong></li>`;
-        }
-    }).leaving((user) => {
-        console.log('leaving: ', user);
-        axios.put('/api/user/' + user.id + '/offline?api_token=' + user.api_token, {});
-        document.querySelector(`.user-${user.nickname}`).remove();
-    }).listen('UserOnline', (e) => {
-        console.log('UserOnline: ', e);
-        let element = document.getElementsByClassName(`user-${e.user.nickname}`);
-        if (element.length == 0) {
-            users_list.innerHTML += `<li class="user-${e.user.nickname}"><strong>${e.user.nickname}</strong></li>`;
-        }
+//URL's
+const startGame = window.location.origin + '/api/jogoApi/start';
 
-    }).listen('UserOffline', (e) => {
-        console.log('UserOffline: ', e);
-        if (e.user.nickname != nickname_input.value) {
-            try {
-                document.querySelector(`.user-${e.user.nickname}`).remove();
-            } catch (e) {
+//Variaveis
+const jogadores_list = document.querySelector('#list_Jogadores');
+const gameId = document.location.pathname.split('/')[2];
 
-            }
+if (jogo.estado_jogo == 0) {
+    var button_start = document.querySelector('#button_start');
+    button_start.onclick = () => {
+        let jogadores = [];
+        let confirmMessage = 'Tem certeza que deseja iniciar o jogo? \n';
+        for (i = 0; i < jogadores_list.children.length; i++) {
+            confirmMessage += `Jogador ${i+1}:  ${jogadores_list.children[i].className.replace('jogador-','')}\n`;
+            jogadores.push(parseInt(jogadores_list.children[i].attributes.user_id.value));
         }
-    }).listen('.pusher:subscription_succeeded', (membros) => {
-        console.log('membros: ', membros);
-        axios.put('/api/user/' + membros.me.id + '/online?api_token=' + membros.me.api_token, {});
-        axios.get('/login/users-online').then(resp => {
-            resp.data.forEach(user => {
-                usuario = membros.members[user.id];
-                if (usuario == null) {
-                    console.log('mudando status', user.nickname, 'para offline')
-                    axios.put('/api/user/' + user.id + '/offline?api_token=' + user.api_token, {})
+        console.log(jogadores)
+        let host_confirm = confirm(confirmMessage);
+        if(host_confirm){
+            const options = {
+                method: 'POST',
+                url: startGame,
+                data: {
+                    id: gameId,
+                    jogadores: jogadores
                 }
-            });
-        })
-
-        Object.keys(membros.members).forEach(id => {
-            users_list.innerHTML += `<li class="user-${membros.members[id].nickname}"><strong>${membros.members[id].nickname}</strong></li>`;
-        })
-    });
+            }
+        
+            axios(options).then(data => {console.log(data)});
+        }
+    }
+}

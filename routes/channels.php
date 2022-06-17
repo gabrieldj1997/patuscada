@@ -22,9 +22,6 @@ Broadcast::channel('App.Chatroom', function ($user) {
   return $user;
 });
 
-Broadcast::channel('App.game-{id}', function ($user) {
-  return $user;
-});
-Broadcast::channel('App.host-game-{id}', function ($user) {
+Broadcast::channel('App.jogo-{id}', function ($user) {
   return $user;
 });

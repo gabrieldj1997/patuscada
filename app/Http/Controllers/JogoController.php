@@ -20,7 +20,7 @@ class JogoController extends Controller
     public function CreatePartida(Request $req)
     {
         $jogo = new Jogo();
-        $jogo->codigo_jogo = $req->input('codigo_jogo');
+        $jogo->codigo = $req->input('codigo_jogo');
         $jogo->id_jogador_criador = Auth::user()->id;
 
         $cartas_brancas = CartasBrancas::all('id');
@@ -34,15 +34,16 @@ class JogoController extends Controller
             return $item->id;
         })->toJson());
         $jogo->cartas_pretas_monte = json_encode($cartas_pretas);
+        $jogo->cartas_pretas_jogo = json_encode(array());
 
         $jogo->save();
-        return redirect()->route('jogo.partida', ['jogo' => $jogo]);
+        return redirect()->route('jogo.partida', [$jogo->id,'jogo' => $jogo]);
     }
 
     public function StartPartida(Request $req)
     {
         event(
-            new MessageJogo($req->input('id'), 'Iniciando partida...')
+            new MessageJogo($req->input('id'), ['tp_message'=>[1,1],'message'=>'Iniciando partida...'])
         );
         $jogo = Jogo::find($req->input('id'));
         if (Auth::user()->id != $jogo->id_jogador_criador) {
@@ -61,7 +62,7 @@ class JogoController extends Controller
 
         $jogo = $this->DistribuirCartas($jogo);
         event(
-            new MessageJogo($jogo->id, 'Partida iniciada')
+            new MessageJogo($req->input('id'), ['tp_message'=>[1,2],'message'=>'Partida iniciada'])
         );
         return json_encode($jogo);
     }
@@ -69,7 +70,8 @@ class JogoController extends Controller
     public function DistribuirCartas($jogo)
     {
         event(
-            new MessageJogo($jogo->id, 'Distribuindo cartas...')
+            new MessageJogo($jogo->id, ['tp_message'=>[2,1],'message'=>'Distribuindo cartas...'])
+
         );
         $jogo = Jogo::find($jogo->id);
         $jogadores = json_decode($jogo->jogadores);
@@ -91,7 +93,7 @@ class JogoController extends Controller
 
         $jogo->save();
         event(
-            new MessageJogo($jogo->id, 'Cartas distribuidas')
+            new MessageJogo($jogo->id, ['tp_message'=>[2,2],'message'=>'Cartas distribuidas'])
         );
         return $jogo;
     }
@@ -103,7 +105,8 @@ class JogoController extends Controller
             return json_encode(["error" => "Você não é o host do jogo"]);
         }
         event(
-            new MessageJogo($req->id, 'Finalizando rodada...')
+            new MessageJogo($jogo->id, ['tp_message'=>[3,1],'message'=>'Finalizando rodada...'])
+
         );
         $jogadores = json_decode($jogo->jogadores);
         $cartas_brancas_descartadas = json_decode($req->cartas_brancas_descartadas);
@@ -129,7 +132,7 @@ class JogoController extends Controller
                 }
             }
             event(
-                new MessageJogo($jogo->id, 'Jogador vencedor: '.$jogador_vencedor["id_jogador"])
+                new MessageJogo($jogo->id, ['tp_message'=>[1,3],'message'=>'Jogador vencedor: '.$jogador_vencedor["id_jogador"].'. Pontuacao: '.$jogador_vencedor["pontuacao"]])
             );
             return json_encode(["message" => "Partida finalizada","jogador_vencedor"=>$jogador_vencedor["id_jogador"]]);
         }
@@ -151,7 +154,7 @@ class JogoController extends Controller
         $jogo->save();
 
         event(
-            new MessageJogo($req->id, 'Rodada Finalizada')
+            new MessageJogo($jogo->id, ['tp_message'=>[3,2],'message'=>'Rodada Finalizada'])
         );
 
         return json_encode($jogo);
@@ -160,14 +163,15 @@ class JogoController extends Controller
     public function ProximaRodada(Request $req)
     {
         event(
-            new MessageJogo($req->id, 'Iniciando próxima rodada...')
+            new MessageJogo($req->input('id'), ['tp_message'=>[4,1],'message'=>'Iniciando próxima rodada...'])
+
         );
         $jogo = Jogo::find($req->input('id'));
         $jogo->rodada_jogo++;
         $jogo->save();
         $this->DistribuirCartas($req);
         event(
-            new MessageJogo($req->id, 'Rodada iniciada')
+            new MessageJogo($req->input('id'), ['tp_message'=>[4,2],'message'=>'Rodada iniciada'])
         );
     }
 
@@ -175,8 +179,20 @@ class JogoController extends Controller
         $jogo = Jogo::find($id_jogo);
         $jogo->estado_jogo = 2;
         $jogo->save();
+    }
+
+    public function FindPartida($codigo){
+        $jogo = Jogo::where('codigo', $codigo)->first();
+        if($jogo == null) {
+            return json_encode(["error" => "Jogo não encontrado"]);
+        }
+        return json_encode($jogo);
+    }
+
+    public function Teste($id){
         event(
-            new MessageJogo($id_jogo, 'Partida finalizada')
+            new MessageJogo($id, ['tp_message'=>[5,5],'message'=>'Mensagem de teste'])
+
         );
     }
 }

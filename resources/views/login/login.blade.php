@@ -71,9 +71,7 @@ if (Session::has('error')) {
                                 @csrf
                                 <div class="row">
                                     <label for="input-codigo">Codigo do sala: (max 5 caracter)</label>
-                                    <input type="text" id="input-codigo" name="codigo">
-                                    <label for="input-name-game">Nome da sala:</label>
-                                    <input type="text" id="input-name-game" name="nome_jogo">
+                                    <input type="text" id="input-codigo" name="codigo_jogo">
                                     <button type="submit" class="btn btn-primary" form="form_game">Criar</button>
                                 </div>
                             </form>
@@ -157,10 +155,10 @@ integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCm
             if(game.id === undefined){
                 alert('Nenhum jogo encontrado')
             }else{
-                if(game.id_estado_jogo != 0){
+                if(game.estado_jogo != 0){
                     alert('Jogo já iniciado ou encerrado')
                 }else{
-                    document.location.href = location.origin+"/jogo/partida/"+game.id
+                    document.location.href = location.origin+"/jogo/"+game.id
                 }
             }
             

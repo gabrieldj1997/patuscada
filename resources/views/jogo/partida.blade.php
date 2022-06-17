@@ -10,44 +10,41 @@
     <title>Jogo</title>
 
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="{{ url(mix('js/app.js')) }}"></script>
+
+
+
+    @if (isset($jogo))
+        <script>
+            var jogo = '<?= $jogo ?>';
+            jogo = JSON.parse(jogo);
+        </script>
+    @endif
 </head>
 
 <body>
     @if (isset($jogo))
-        <h1>Jogo {{ $jogo->id }}</h1>
-        <h2>{{ $jogo->nome_jogo }}</h2>
-        <h2>{{ $jogo->codigo }}</h2>
-        <h3 id="estadoJogo">{{ $jogo->id_estado_jogo }}</h3>
-        <button class="btn btn-primary" id="btn-iniciar">Iniciar Partida</button>
-        <div id="container">
-            <div id="aba-1">
+        <!--Jogo estado aguardando inicio-->
+        @if ($jogo->estado_jogo == 0)
+            @include('jogo.salaEspera')
 
-            </div>
-            <div id="aba-2">
-
-            </div>
-            <div id="aba-3">
-
-            </div>
-        </div>
-        <div id="jogadores">
-
-        </div>
+            <!--Jogo estado aguardando iniciado-->
+        @else
+            <!--Jogo encerrado-->
+        @endif
     @else
         <h1>Jogo não encontrado</h1>
+        <button type="button" class="btn btn-primary"
+            onclick="window.location='{{ route('login.index') }}'">Login</button>
     @endif
+    <button type="button" class="btn btn-primary"
+    id="button_test">Login</button>
 </body>
-
-<script src="{{ url(mix('js/app.js')) }}"></script>
-
-@if (Auth::user()->id == $jogo->id_usuario_criador)
-    {
-    <script src="{{ url('./js/jogo/host.js') }}"></script>
-    }
-@else
-    {
-    <script src="{{ url(mix('js/jogo/client.js')) }}"></script>
-    }
+<script src="{{ url(mix('js/jogo.js')) }}"></script>
+<script src="{{ url(mix('js/jogo/client.js')) }}"></script>
+@if (Auth::user()->id == $jogo->id_jogador_criador)
+<script src="{{ url('./js/jogo/host.js') }}"></script>
 @endif
+
 
 </html>

@@ -41,6 +41,7 @@ Route::controller(CartasBrancasController::class)->prefix('cartasbrancas')->name
 });
 
 Route::controller(JogoController::class)->prefix('jogoApi')->name('jogoApi.')->group(function(){
-    Route::get('/start', 'StartPartida')->name('start');
-    Route::get('/next', 'FinalizarRodada')->name('next');
+    Route::post('/start', 'StartPartida')->name('start');
+    Route::post('/next', 'FinalizarRodada')->name('next');
+    Route::get('/find/{codigo}', 'FindPartida')->name('find');
 });

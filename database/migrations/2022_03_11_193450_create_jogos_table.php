@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('tb_jogos', function (Blueprint $table) {
             $table->id();
             $table->string('codigo')->unique();
-            $table->integer('id_jogador_criador')->nullable();
-            $table->string('jogadores');
+            $table->integer('id_jogador_criador');
+            $table->string('jogadores')->nullable();
             $table->string('cartas_brancas_monte');
             $table->string('cartas_pretas_monte');
             $table->string('cartas_pretas_jogo');
