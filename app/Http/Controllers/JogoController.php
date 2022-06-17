@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\JogoRequest;
 use Illuminate\Http\Request;
 use App\Models\Jogo;
-use App\Models\Rodadas;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CartasBrancas;
 use App\Models\CartasPretas;
 use App\Events\MessageJogo;
-use App\Events\HostJogo;
 
 class JogoController extends Controller
 {
