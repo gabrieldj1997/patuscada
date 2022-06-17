@@ -101,10 +101,13 @@ class JogoController extends Controller
 
     public function FinalizarRodada(Request $req)
     {
+        $jogo = Jogo::find($req->input('id'));
+        if(Auth::user()->id != $jogo->id_jogador_criador) {
+            return json_encode(["error" => "Você não é o host do jogo"]);
+        }
         event(
             new MessageJogo($req->id, 'Finalizando rodada...')
         );
-        $jogo = Jogo::find($req->input('id'));
         $jogadores = json_decode($jogo->jogadores);
         $cartas_brancas_descartadas = json_decode($req->cartas_brancas_descartadas);
         $jogador_ganhador = json_decode($req->jogador_ganhador);
