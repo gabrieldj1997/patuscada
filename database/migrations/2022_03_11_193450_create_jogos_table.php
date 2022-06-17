@@ -16,11 +16,13 @@ return new class extends Migration
         Schema::create('tb_jogos', function (Blueprint $table) {
             $table->id();
             $table->string('codigo')->unique();
-            $table->string('nome_jogo');
-            $table->string('id_estado_jogo')->default(0);
-            $table->integer('rodada')->default(0);
-            $table->integer('user_master')->nullable();
+            $table->integer('id_jogador_criador')->nullable();
             $table->string('jogadores');
+            $table->string('cartas_brancas_monte');
+            $table->string('cartas_pretas_monte');
+            $table->string('cartas_pretas_jogo');
+            $table->integer('rodada_jogo')->default(0);
+            $table->integer('estado_jogo')->default(0);
             $table->timestamps();
         });
     }

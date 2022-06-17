@@ -2,28 +2,25 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GameEvent
+class MessageJogo
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $nickname;
+    public $jogoId;
     public $data;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($nickname, $data)
+    public function __construct( $jogoId, $data)
     {
-        $this->nickname = $nickname;
+        $this->jogoId = $jogoId;
         $this->data = $data;
     }
 
@@ -34,7 +31,7 @@ class GameEvent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('game-'.$this->data->game->id);
+        return new PresenceChannel('game-'.$this->jogoId);
     }
 
     public function broadcastAs()

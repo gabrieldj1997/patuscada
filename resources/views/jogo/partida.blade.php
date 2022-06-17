@@ -7,7 +7,7 @@
     <title>Jogo</title>
 </head>
 <body>
-     
+    @if(isset($jogo))
     <h1>Jogo {{ $jogo->id }}</h1>
     <h2>{{ $jogo->nome_jogo }}</h2>
     <h2>{{ $jogo->codigo }}</h2>
@@ -27,6 +27,9 @@
     <div id="jogadores">
         
     </div>
+    @else
+    <h1>Jogo não encontrado</h1>
+    @endif
 </body>
 <script src="{{ url('./js/jogo.js') }}"></script>
 </html>
