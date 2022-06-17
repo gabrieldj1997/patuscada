@@ -62,18 +62,19 @@ class JogoController extends Controller
         
         $jogo->save();
 
-        $this->DistribuirCartas($req);
+        $jogo = $this->DistribuirCartas($jogo);
         event(
             new MessageJogo($jogo->id, 'Partida iniciada')
         );
+        return json_encode($jogo);
     }
 
-    public function DistribuirCartas(Request $req)
+    public function DistribuirCartas($jogo)
     {
         event(
-            new MessageJogo($req->id, 'Distribuindo cartas...')
+            new MessageJogo($jogo->id, 'Distribuindo cartas...')
         );
-        $jogo = Jogo::find($req->input('id'));
+        $jogo = Jogo::find($jogo->id);
         $jogadores = json_decode($jogo->jogadores);
         $cartas_monte = json_decode($jogo->cartas_brancas_monte);
         foreach ($jogadores as $jogador) {
@@ -93,12 +94,9 @@ class JogoController extends Controller
 
         $jogo->save();
         event(
-            new MessageJogo($req->id, 'Cartas distribuidas')
+            new MessageJogo($jogo->id, 'Cartas distribuidas')
         );
-
-        event(
-            new HostJogo($jogo->id, json_encode($jogo))
-        );
+        return $jogo;
     }
 
     public function FinalizarRodada(Request $req)
@@ -123,8 +121,7 @@ class JogoController extends Controller
         );
 
         if(count(json_decode($jogo->cartas_brancas_monte)) < count($jogadores) || count($cartas_pretas) < 3) {
-            $jogo->estado_jogo = 2;
-            $jogo->save();
+            $this->FinalizarPartida($jogo->id);
             $jogador_vencedor = ["id_jogador"=>0, "pontuacao"=>0];
             foreach($jogadores as $jogador) {
                 if(count($jogador->pontuacao) > $jogador_vencedor["pontuacao"]) {
@@ -132,7 +129,7 @@ class JogoController extends Controller
                 }
             }
             event(
-                new MessageJogo($jogo->id, 'Partida finalizada! Jogador vencedor: '.$jogador_vencedor["id_jogador"])
+                new MessageJogo($jogo->id, 'Jogador vencedor: '.$jogador_vencedor["id_jogador"])
             );
             return json_encode(["message" => "Partida finalizada","jogador_vencedor"=>$jogador_vencedor["id_jogador"]]);
         }
@@ -156,10 +153,8 @@ class JogoController extends Controller
         event(
             new MessageJogo($req->id, 'Rodada Finalizada')
         );
-        $this->FinalizarRodada($req);
-        event(
-            new HostJogo($jogo->id, json_encode($jogo))
-        );
+
+        return json_encode($jogo);
     }
 
     public function ProximaRodada(Request $req)
@@ -172,7 +167,16 @@ class JogoController extends Controller
         $jogo->save();
         $this->DistribuirCartas($req);
         event(
-            new MessageJogo($req->id, 'Próxima rodada iniciada')
+            new MessageJogo($req->id, 'Rodada iniciada')
+        );
+    }
+
+    public function FinalizarPartida($id_jogo){
+        $jogo = Jogo::find($id_jogo);
+        $jogo->estado_jogo = 2;
+        $jogo->save();
+        event(
+            new MessageJogo($id_jogo, 'Partida finalizada')
         );
     }
 }

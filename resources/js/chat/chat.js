@@ -5,7 +5,7 @@ const { default: axios } = require('axios');
 const urlMessage = window.location.origin + '/send-message';
 
 // Enable pusher logging - don't include this in production
-// Pusher.logToConsole = true;
+Pusher.logToConsole = true;
 
 const nickname_input = document.getElementById('nickname_input');
 const messages_el = document.getElementById('messages');

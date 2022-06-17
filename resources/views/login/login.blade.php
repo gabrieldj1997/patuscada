@@ -67,7 +67,7 @@ if (Session::has('error')) {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="form_game" action="{{ route('jogo.register') }}" method="POST">
+                            <form id="form_game" action="{{ route('jogo.create') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <label for="input-codigo">Codigo do sala: (max 5 caracter)</label>

@@ -31,7 +31,7 @@ class MessageJogo
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('game-'.$this->jogoId);
+        return new PresenceChannel('App.game-'.$this->jogoId);
     }
 
     public function broadcastAs()

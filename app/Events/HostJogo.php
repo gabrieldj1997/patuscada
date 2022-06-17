@@ -31,7 +31,7 @@ class HostJogo
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('host-game-'.$this->jogoId);
+        return new PrivateChannel('App.host-game-'.$this->jogoId);
     }
 
     public function broadcastAs()

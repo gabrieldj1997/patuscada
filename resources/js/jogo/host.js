@@ -1,17 +1,5 @@
 require('../bootstrap');
 
-const { default: axios } = require('axios');
-const users_list = document.querySelector('#jogadores');
-const gameId = document.location.pathname.split('/')[3];
-try {
-    axios.get(`/api/jogoApi/${gameId}`).then(res => {
-
-    });   
-} catch (e) {
-    alert('erro de conexão com o servidor')
-}
-
-
 // window.Echo.channel('chat')
 //     .listen('.message', (e) => {
 //         if (e.nickname == nickname_input.value) {
@@ -22,15 +10,6 @@ try {
 //         messages_el.scrollTop = messages_el.scrollHeight;
 //     });
 
-// window.Echo.channel('chat')
-//     .listen('.message', (e) => {
-//         if (e.nickname == nickname_input.value) {
-//             messages_el.innerHTML += `<div class="self-messages messages"><strong>você</strong>: <div class="message-text">${e.message}</div></div>`;
-//         } else {
-//             messages_el.innerHTML += `<div class="other-messages messages"><strong>${e.nickname}</strong>: <div class="message-text">${e.message}</div></div>`;
-//         }
-//         messages_el.scrollTop = messages_el.scrollHeight;
-//     });
 window.Echo.join('App.game-' + gameId)
     .joining((user) => {
         console.log('joining: ', user);
