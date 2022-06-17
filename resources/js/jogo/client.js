@@ -20,3 +20,9 @@ buttonTest.onclick = () => {
 
     axios(options)
 }
+
+window.Echo.channel('jogo-message-' + gameId)
+    .listen('.message', (data) => {
+        
+    });
+

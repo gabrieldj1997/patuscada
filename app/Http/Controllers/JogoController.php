@@ -163,7 +163,7 @@ class JogoController extends Controller
     public function ProximaRodada(Request $req)
     {
         event(
-            new MessageJogo($req->input('id'), ['tp_message'=>[4,1],'message'=>'Iniciando próxima rodada...'])
+            new MessageJogo($req->input('id'), ['tp_message'=>[3,3],'message'=>'Iniciando próxima rodada...'])
 
         );
         $jogo = Jogo::find($req->input('id'));
@@ -171,7 +171,7 @@ class JogoController extends Controller
         $jogo->save();
         $this->DistribuirCartas($req);
         event(
-            new MessageJogo($req->input('id'), ['tp_message'=>[4,2],'message'=>'Rodada iniciada'])
+            new MessageJogo($req->input('id'), ['tp_message'=>[3,4],'message'=>'Rodada iniciada'])
         );
     }
 

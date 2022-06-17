@@ -44,8 +44,5 @@ window.Echo.join('App.jogo-' + gameId)
             users_list.innerHTML += `<li class="jogador-${membros.members[id].nickname}" user_id="${membros.members[id].id}"><strong>${membros.members[id].nickname}</strong></li>`;
         })
     });
-window.Echo.channel('jogo-message-' + gameId)
-    .listen('.message', (data) => {
-        console.log(data)
-    });
+
 
