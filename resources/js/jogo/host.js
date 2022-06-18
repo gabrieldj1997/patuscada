@@ -26,12 +26,13 @@ if (jogo.estado_jogo == 0) {
                 method: 'POST',
                 url: startGame,
                 data: {
-                    id: gameId,
+                    id_jogo: gameId,
+                    id_user: myId,
                     jogadores: jogadores
                 }
             }
         
-            axios(options).then(data => {console.log(data)});
+            axios(options);
         }
     }
 }

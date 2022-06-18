@@ -2,12 +2,13 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CartasJogo
+class CartasJogo implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -33,7 +34,7 @@ class CartasJogo
      */
     public function broadcastOn()
     {
-        return new  PresenceChannel('App.game-'.$this->jogoId);
+        return new  Channel('game-cartas'.$this->jogoId);
     }
 
     public function broadcastAs()

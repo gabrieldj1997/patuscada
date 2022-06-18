@@ -1,9 +1,11 @@
+const { default: axios } = require('axios');
 const { Channel } = require('pusher-js');
 
 //config
 require('../bootstrap');
 
 //URL's
+const testeMessageJogo = window.location.origin + '/jogo/teste';
 
 //Variaveis
 const users_list = document.querySelector('#list_Jogadores');
@@ -45,4 +47,11 @@ window.Echo.join('App.jogo-' + gameId)
         })
     });
 
+buttonTest.onclick = () => {
+    var options = {
+        method: 'GET',
+        url: testeMessageJogo + '/' + gameId
+    }
 
+    axios(options);
+}

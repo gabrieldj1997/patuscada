@@ -16,6 +16,7 @@
 
     @if (isset($jogo))
         <script>
+            var myId = '<?= Auth::user()->id ?>';
             var jogo = '<?= $jogo ?>';
             jogo = JSON.parse(jogo);
         </script>
@@ -28,8 +29,9 @@
         @if ($jogo->estado_jogo == 0)
             @include('jogo.salaEspera')
 
-            <!--Jogo estado aguardando iniciado-->
+            <!--Jogo estado iniciado-->
         @else
+        
             <!--Jogo encerrado-->
         @endif
     @else
@@ -38,7 +40,7 @@
             onclick="window.location='{{ route('login.index') }}'">Login</button>
     @endif
     <button type="button" class="btn btn-primary"
-    id="button_test">Login</button>
+    id="button_test">Teste Message</button>
 </body>
 <script src="{{ url(mix('js/jogo.js')) }}"></script>
 <script src="{{ url(mix('js/jogo/client.js')) }}"></script>

@@ -58,7 +58,7 @@ Route::controller(LoginController::class)->prefix('login')->name('login.')->grou
 Route::controller(JogoController::class)->middleware('auth')->prefix('jogo')->name('jogo.')->group(function () {
    Route::get('/{id}', 'Partida')->name('partida');
    Route::post('/create', 'CreatePartida')->name('create');
-   Route::get('/teste/{id}', 'Teste')->name('teste');
+   Route::get('/teste/{id_jogo}', 'Teste')->name('teste');
 });
 
 Auth::routes();
