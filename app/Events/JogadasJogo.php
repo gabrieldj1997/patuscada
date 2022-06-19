@@ -10,10 +10,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class JogadasJogo
+class JogadasJogo implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $jogoId;
     public $jogadorId;
     public $tp_jogada;
     public $cartas;
@@ -22,12 +23,12 @@ class JogadasJogo
      *
      * @return void
      */
-    public function __construct( $jogadorId, $tp_jogada, $cartas)
+    public function __construct( $jogoId ,$jogadorId, $tp_jogada, $cartas)
     {
+        $this->jogoId = $jogoId;
         $this->jogadorId = $jogadorId;
         $this->tp_jogada = $tp_jogada;
-        $this->cartas
-         = $cartas;
+        $this->cartas = $cartas;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -36,7 +37,7 @@ class JogadasJogo
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('App.game-'.$this->jogoId);
+        return new Channel('jogo-jogada-'.$this->jogoId);
     }
 
     public function broadcastAs()

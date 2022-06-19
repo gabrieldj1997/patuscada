@@ -7,7 +7,8 @@ use App\Http\Controllers\CartasPretasController;
 use App\Http\Controllers\JogoController;
 use App\Http\Controllers\UserOfflineController;
 use App\Http\Controllers\UserOnlineController;
-
+use App\Events\MessageJogo;
+use App\Events\JogadasJogo;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,4 +45,18 @@ Route::controller(JogoController::class)->prefix('jogoApi')->name('jogoApi.')->g
     Route::post('/start', 'StartPartida')->name('start');
     Route::post('/next', 'FinalizarRodada')->name('next');
     Route::get('/find/{codigo}', 'FindPartida')->name('find');
+    //Eventos de Jogo
+    Route::post('/{jogoId}/cartapreta', 'ChooseCartaPreta')->name('chossecartapreta');
+    Route::post('/{jogoId}/cartabranca', 'ChooseCartaBranca')->name('chossecartabranca');
+    Route::post('/{jogoId}/vencedor', 'ChooseJogadorVencedor')->name('chossejogadorvencedor');
+    //Teste
+    Route::post('/{id}/teste', function(Request $req, $id){
+        event(
+            new MessageJogo($id, ['tp_message' => [5, 5], 'message' => 'Mensagem de teste'])
+
+        );
+        event(
+            new JogadasJogo($id, $req->input('my_id'), 1, $req->input('id_carta_preta'))
+        );
+    })->name('teste');
 });

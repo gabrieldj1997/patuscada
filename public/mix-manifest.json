@@ -1,9 +1,9 @@
 {
-    "/js/app.js": "/js/app.js?id=252819a7fe7405f68742b4d25ed05e49",
-    "/js/chat.js": "/js/chat.js?id=1dd22ec0b653f7e4643e3424039aa98e",
-    "/js/jogo.js": "/js/jogo.js?id=a700d2b58f236ebeeec21948abb078b6",
-    "/js/jogo/host.js": "/js/jogo/host.js?id=e1f7b7085de9442be14ff566c91fefce",
-    "/js/jogo/client.js": "/js/jogo/client.js?id=d7de22545c856fa4073becaf24367f58",
+    "/js/app.js": "/js/app.js?id=a416c20c22105f92fee4d56b262fcc18",
+    "/js/chat.js": "/js/chat.js?id=419378e94a8cfdf81eaac21fd5a38b1c",
+    "/js/jogo.js": "/js/jogo.js?id=23511f6fb7f025012de5bab81a2da483",
+    "/js/jogo/host.js": "/js/jogo/host.js?id=dc13bd331ff9abc9a5c39b7f9f796339",
+    "/js/jogo/client.js": "/js/jogo/client.js?id=6961707afdcb3b9654b7f6bb7b24f713",
     "/css/app.css": "/css/app.css?id=1ba4616002e30d600ff3f664161ff848",
     "/css/style.css": "/css/style.css?id=1b295558cc18798b075100f2c5687a33"
 }

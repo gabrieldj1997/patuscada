@@ -9,21 +9,37 @@
 
     <title>Jogo</title>
 
+    <link href="{{ url(mix('css/app.css')) }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script src="{{ url(mix('js/app.js')) }}"></script>
-
-
 
     @if (isset($jogo))
         <script>
             var myId = '<?= Auth::user()->id ?>';
-            var jogo = '<?= $jogo ?>';
-            jogo = JSON.parse(jogo);
+            var estadoJogo = `<?= $jogo->estado_jogo ?>`;
         </script>
+        @if ($jogo->estado_jogo != 0)
+            <script>
+                var jogadorLeitor =
+                    '<?= json_decode($jogo->jogadores)[(1 - $jogo->rodada_jogo) % count(json_decode($jogo->jogadores))]->jogador ?>';
+                var jogadorCriador = '<?= $jogo->id_jogador_criador ?>';
+                console.log(jogadorLeitor)
+            </script>
+        @endif
     @endif
 </head>
 
 <body>
+    <div id="mensagens">
+        @if ($jogo->estado_jogo != 0)
+            @if (json_decode($jogo->jogadores)[(1 - $jogo->rodada_jogo) % count(json_decode($jogo->jogadores))]->jogador == Auth::user()->id)
+                <h1>Escolha uma carta preta</h1>
+            @else
+                <h1>Aguarde o leitor escolher uma carta preta</h1>
+            @endif
+        @endIf
+    </div>
     @if (isset($jogo))
         <!--Jogo estado aguardando inicio-->
         @if ($jogo->estado_jogo == 0)
@@ -31,7 +47,7 @@
 
             <!--Jogo estado iniciado-->
         @else
-        
+            @include('jogo.telaCentral')
             <!--Jogo encerrado-->
         @endif
     @else
@@ -39,14 +55,32 @@
         <button type="button" class="btn btn-primary"
             onclick="window.location='{{ route('login.index') }}'">Login</button>
     @endif
+
+    @if (Auth::user()->id == $jogo->id_jogador_criador)
+        <button type="button" class="btn btn-primary" style="display:none;" id="buttonFinalizarRodada">Finalizar
+            rodada</button>
+        <input id="inputIdJogo" type="text" style="display: none;" />
+        <input id="inputJogadorGanhador" type="text" style="display: none;" />
+        <input id="inputCartaBrancaDescartada" type="text" style="display: none;" />
+        <input id="inputCartaPretaDescartada" type="text" style="display: none;" />
+    @endif
     <button type="button" class="btn btn-primary"
-    id="button_test">Teste Message</button>
+    onclick="window.location='{{ route('login.index') }}'">Voltar</button>
 </body>
 <script src="{{ url(mix('js/jogo.js')) }}"></script>
 <script src="{{ url(mix('js/jogo/client.js')) }}"></script>
 @if (Auth::user()->id == $jogo->id_jogador_criador)
-<script src="{{ url('./js/jogo/host.js') }}"></script>
+    <script src="{{ url('./js/jogo/host.js') }}"></script>
 @endif
 
+<script>
+    var TipoJogador = () => {
+        if (myId == jogadorLeitor) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+</script>
 
 </html>
