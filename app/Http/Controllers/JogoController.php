@@ -18,7 +18,7 @@ class JogoController extends Controller
     {
         $jogo = Jogo::find($id);
         $jogadores = JogadorCartas::where('id_jogo', $id)->get();
-        return view('jogo.partida', ['jogo' => $jogo,'jogadores' => $jogadores]);
+        return view('jogo.partida', ['jogo' => $jogo, 'jogadores' => $jogadores]);
     }
 
     public function CreatePartida(Request $req)
@@ -62,7 +62,7 @@ class JogoController extends Controller
             $jogador_carta->id_jogo = $jogo->id;
             $jogador_carta->id_jogador = $jogador;
             $jogador_carta->cartas = json_encode(array());
-            $jogador_carta->pontuacao = json_encode(array());
+            $jogador_carta->pontuacao = 0;
             $jogador_carta->save();
         }
 
@@ -70,6 +70,7 @@ class JogoController extends Controller
         event(
             new MessageJogo($jogo->id, ['tp_message' => [1, 2], 'message' => 'Partida iniciada'])
         );
+        
         $this->ProximaRodada($req);
     }
 
@@ -79,8 +80,6 @@ class JogoController extends Controller
             new MessageJogo($jogo->id, ['tp_message' => [2, 1], 'message' => 'Distribuindo cartas...'])
 
         );
-
-        $jogo = Jogo::find($jogo->id);
         $jogadores = JogadorCartas::where('id_jogo', $jogo->id)->get();
         $cartas_brancas_monte = json_decode($jogo->cartas_brancas_monte);
 
@@ -93,7 +92,7 @@ class JogoController extends Controller
             $jogador->cartas = json_encode($jogador_cartas);
             $jogador->save();
         };
-
+        
         $jogo->cartas_brancas_monte = json_encode($cartas_brancas_monte);
 
         $cartas_pretas_monte = json_decode($jogo->cartas_pretas_monte);
@@ -128,7 +127,7 @@ class JogoController extends Controller
         //         'tres' => $req->input('carta_preta_descartada'),
         //         'quarto' => $req->input('cartas_brancas_descartadas'),
         //     ]);
-        $jogo = Jogo::find($req->input('id'));
+        $jogo = Jogo::find($req->input('id_jogo'));
         if ($req->input('my_id') != $jogo->id_jogador_criador) {
             return json_encode(["error" => "Você não é o host do jogo"]);
         }
@@ -143,13 +142,11 @@ class JogoController extends Controller
         $cartas_pretas = json_decode($jogo->cartas_pretas_monte);
 
         //pontuando jogador ganhador
-        array_push(
-            $jogadores[array_search($jogador_ganhador->id_jogador, array_column($jogadores, 'id_jogador'))]->pontuacao,
-            [
-                "carta_preta" => $jogador_ganhador->id_carta_preta,
-                "carta_branca" => $jogador_ganhador->id_carta_branca
-            ]
-        );
+        $indexJogador = array_search($jogador_ganhador->id_jogador, array_column(json_decode($jogadores), 'id_jogador'));
+        $jogador_vencedor = $jogadores[$indexJogador];
+        $jogador_vencedor->pontuacao++;
+        $jogador_vencedor->save();
+        $jogadores[$indexJogador] = $jogador_vencedor;
 
         if (count(json_decode($jogo->cartas_brancas_monte)) < count($jogadores) || count($cartas_pretas) < 3) {
             $this->FinalizarPartida($jogo->id);
@@ -168,9 +165,11 @@ class JogoController extends Controller
         foreach ($cartas_brancas_descartadas as $cartas_descartadas) {
             $id_jogador = $cartas_descartadas->id;
             foreach ($cartas_descartadas->cartas as $carta) {
-                $indJogador = array_search($id_jogador, array_column($jogadores, 'id_jogador'));
-                $indCarta = array_search($carta, $jogadores[$indJogador]->cartas);
-                array_splice($jogadores[$indJogador]->cartas, $indCarta, 1);
+                $indJogador = array_search($id_jogador, array_column(json_decode($jogadores), 'id_jogador'));
+                $indCarta = array_search($carta, json_decode($jogadores[$indJogador]->cartas));
+                $array_cartas = json_decode($jogadores[$indJogador]->cartas);
+                array_splice($array_cartas, $indCarta, 1);
+                $jogadores[$indJogador]->cartas = json_encode($array_cartas);
                 $jogadores[$indJogador]->save();
             }
         }
@@ -186,14 +185,14 @@ class JogoController extends Controller
         event(
             new MessageJogo($jogo->id, ['tp_message' => [3, 4], 'message' => 'Rodada Finalizada'])
         );
-        $this->DistribuirCartas($jogo);
-        return json_encode($jogo);
+        $t = $this->ProximaRodada($req);
+        return $t;
     }
 
     public function ProximaRodada(Request $req)
     {
-
         $jogo = Jogo::find($req->input('id_jogo'));
+
         event(
             new MessageJogo($jogo->id, ['tp_message' => [3, 1], 'message' => 'Iniciando proxima rodada'])
         );
@@ -205,7 +204,7 @@ class JogoController extends Controller
         event(
             new MessageJogo($jogo->id, ['tp_message' => [3, 2], 'message' => 'Rodada iniciada', 'jogador_leitor' => $jogadores[$jogo->rodada_jogo % count($jogadores)]->id_jogador])
         );
-        
+
         $this->DistribuirCartas($jogo);
     }
 
@@ -268,7 +267,8 @@ class JogoController extends Controller
         );
     }
 
-    public function TesteJogadores(Request $req, $id){
+    public function TesteJogadores(Request $req, $id)
+    {
         $jogo = Jogo::find($id);
         $jogadores = JogadorCartas::where('id_jogo', $jogo->id)->get();
         $cartas_brancas_monte = json_decode($jogo->cartas_brancas_monte);

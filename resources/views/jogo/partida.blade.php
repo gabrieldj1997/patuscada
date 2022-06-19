@@ -21,7 +21,7 @@
         @if ($jogo->estado_jogo != 0)
             <script>
                 var jogadorLeitor =
-                    '<?= json_decode($jogadores)[(1 - $jogo->rodada_jogo) % count(json_decode($jogadores))]->id_jogador ?>';
+                    '<?= json_decode($jogadores)[($jogo->rodada_jogo-1) % count(json_decode($jogadores))]->id_jogador ?>';
                 var jogadorCriador = '<?= $jogo->id_jogador_criador ?>';
                 console.log("Jogador Leitor = " + jogadorLeitor)
             </script>
@@ -31,7 +31,7 @@
 <body>
     <div id="mensagens">
         @if ($jogo->estado_jogo != 0)
-            @if (json_decode($jogadores)[(1 - $jogo->rodada_jogo) % count(json_decode($jogadores))]->id_jogador == Auth::user()->id)
+            @if (json_decode($jogadores)[($jogo->rodada_jogo - 1) % count(json_decode($jogadores))]->id_jogador == Auth::user()->id)
                 <h1>Escolha uma carta preta</h1>
             @else
                 <h1>Aguarde o leitor escolher uma carta preta</h1>

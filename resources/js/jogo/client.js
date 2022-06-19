@@ -109,9 +109,9 @@ async function JogadaTrigger(message) {
             document.querySelector('#mensagens').innerHTML = `<h1>Escolha uma carta branca</h1>`
         }else if(message.tp_jogada == 3){
             box_cartas_brancas_leitor.style.display = 'block'
-            var carta = await GeradorCarta(message.cartas.id_carta_branca, 'branca', jogadorId);
+            var carta = await GeradorCarta(message.cartas.id_carta_branca, 'branca', message.jogadorId);
             box_cartas_brancas_leitor.innerHTML += carta;
-            document.querySelector('#mensagens').innerHTML = `<h1>Jogador ${message.cartas.id_jogador} venceu a rodada!</h1>`
+            document.querySelector('.button_carta_branca_leitor').remove()
         }
     }
     if(message.tp_jogada == 3){

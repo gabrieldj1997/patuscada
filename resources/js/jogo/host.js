@@ -75,7 +75,7 @@ buttonFinalizarRodada.onclick = () => {
         method: 'POST',
         url: finishRodada,
         data: {
-            id: inputIdJogo.value,
+            id_jogo: inputIdJogo.value,
             cartas_brancas_descartadas: inputCartaBrancaDescartada.value,
             carta_preta_descartada: inputCartaPretaDescartada.value,
             jogador_ganhador: inputJogadorGanhador.value,
