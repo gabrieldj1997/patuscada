@@ -185,8 +185,7 @@ class JogoController extends Controller
         // event(
         //     new MessageJogo($jogo->id, ['tp_message' => [3, 4], 'message' => 'Rodada Finalizada'])
         // );
-        $t = $this->ProximaRodada($req);
-        return $t;
+        $this->ProximaRodada($req);
     }
 
     public function ProximaRodada(Request $req)

@@ -23,7 +23,6 @@
                 var jogadorLeitor =
                     '<?= json_decode($jogadores)[($jogo->rodada_jogo-1) % count(json_decode($jogadores))]->id_jogador ?>';
                 var jogadorCriador = '<?= $jogo->id_jogador_criador ?>';
-                console.log("Jogador Leitor = " + jogadorLeitor)
             </script>
         @endif
     @endif

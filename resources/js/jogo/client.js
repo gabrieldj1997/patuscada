@@ -4,26 +4,18 @@ require('../bootstrap');
 const { default: axios } = require('axios');
 
 //URL's
-const startGame = window.location.origin + '/jogo/start';
 const getCartaPreta = window.location.origin + '/api/cartaspretas';
 const getCartaBranca = window.location.origin + '/api/cartasbrancas';
-const chosseCartaPreta = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartapreta`;
-const chosseCartaBranca = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartabranca`;
 const chosseVencedor = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/vencedor`;
 
 //Variaveis
-const users_list = document.querySelector('#list_Jogadores');
 const gameId = document.location.pathname.split('/')[2];
 const box_cartas_brancas_leitor = document.querySelector('#box_cartas_brancas_leitor');
-const box_cartas_brancas_jogador = document.querySelector('#box_cartas_brancas');
-const box_cartas_pretas_leitor = document.querySelector('#box_cartas_pretas_leitor');
 const box_cartas_pretas_jogador = document.querySelector('#box_cartas_pretas');
-const botao_cartas_pretas = document.querySelectorAll('.button_carta_preta');
 const botao_cartas_brancas = document.querySelectorAll('.button_carta_branca');
 
 window.Echo.channel('jogo-message-' + gameId)
     .listen('.message', (data) => {
-        console.log(data)
         MessageTrigger(data)
     });
 
@@ -33,7 +25,6 @@ window.Echo.channel('jogo-message-' + gameId)
 //     })
 window.Echo.channel('jogo-jogada-' + gameId)
     .listen('.jogadas', (data) => {
-        console.log(data)
         JogadaTrigger(data)
     })
 
@@ -71,7 +62,6 @@ async function JogadaTrigger(message) {
             if (botao_cartas_brancas_leitor.length > 0) {
                 botao_cartas_brancas_leitor.forEach(carta => {
                     carta.addEventListener('click', (event) => {
-                        console.log(event.path[1].previousElementSibling.attributes.idCartaBranca.value);
                         let idCartaPreta = document.querySelector('.carta_preta_leitor').attributes.idcartapreta.value
                         let idCartaBranca = event.path[1].previousElementSibling.attributes.idCartaBranca.value;
                         let jogadorGanhador = event.path[1].previousElementSibling.attributes.idjogador.value;

@@ -7,7 +7,6 @@ require('../bootstrap');
 //URL's
 const chosseCartaPreta = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartapreta`;
 const chosseCartaBranca = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartabranca`;
-const chosseVencedor = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/vencedor`;
 
 //Variaveis
 const users_list = document.querySelector('#list_Jogadores');

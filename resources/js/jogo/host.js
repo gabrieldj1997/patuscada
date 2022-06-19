@@ -18,7 +18,6 @@ const inputCartaPretaDescartada = document.querySelector('#inputCartaPretaDescar
 
 window.Echo.channel('jogo-jogada-' + gameId)
     .listen('.jogadas', (data) => {
-        console.log(data)
         if (data.tp_jogada == 1) {
             inputCartaPretaDescartada.value = data.cartas.id
         } else if (data.tp_jogada == 2) {
@@ -53,7 +52,6 @@ if (estadoJogo == 0) {
             confirmMessage += `Jogador ${i + 1}:  ${jogadores_list.children[i].className.replace('jogador-', '')}\n`;
             jogadores.push(parseInt(jogadores_list.children[i].attributes.user_id.value));
         }
-        console.log(jogadores)
         let host_confirm = confirm(confirmMessage);
         if (host_confirm) {
             const options = {
