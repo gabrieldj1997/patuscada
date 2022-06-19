@@ -107,6 +107,10 @@ async function JogadaTrigger(message) {
                 botao.parentElement.style.display = 'flex'
             })
             document.querySelector('#mensagens').innerHTML = `<h1>Escolha uma carta branca</h1>`
+        }else if(message.tp_jogada == 3){
+            box_cartas_brancas_leitor.style.display = 'block'
+            var carta = await GeradorCarta(message.cartas.id_carta_branca, 'branca', jogadorId);
+            box_cartas_brancas_leitor.innerHTML += carta;
         }
     }
     if(message.tp_jogada == 3){
