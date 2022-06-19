@@ -47,9 +47,9 @@ class JogoController extends Controller
     public function StartPartida(Request $req)
     {
         $jogo = Jogo::find($req->input('id_jogo'));
-        event(
-            new MessageJogo($jogo->id, ['tp_message' => [1, 1], 'message' => 'Iniciando partida...'])
-        );
+        // event(
+        //     new MessageJogo($jogo->id, ['tp_message' => [1, 1], 'message' => 'Iniciando partida...'])
+        // );
 
         if ($req->input('id_user') != $jogo->id_jogador_criador) {
             return json_encode(["error" => "Você não é o host do jogo"]);
@@ -76,10 +76,10 @@ class JogoController extends Controller
 
     public function DistribuirCartas($jogo)
     {
-        event(
-            new MessageJogo($jogo->id, ['tp_message' => [2, 1], 'message' => 'Distribuindo cartas...'])
+        // event(
+        //     new MessageJogo($jogo->id, ['tp_message' => [2, 1], 'message' => 'Distribuindo cartas...'])
 
-        );
+        // );
         $jogadores = JogadorCartas::where('id_jogo', $jogo->id)->get();
         $cartas_brancas_monte = json_decode($jogo->cartas_brancas_monte);
 
@@ -131,10 +131,10 @@ class JogoController extends Controller
         if ($req->input('my_id') != $jogo->id_jogador_criador) {
             return json_encode(["error" => "Você não é o host do jogo"]);
         }
-        event(
-            new MessageJogo($jogo->id, ['tp_message' => [3, 3], 'message' => 'Finalizando rodada...'])
+        // event(
+        //     new MessageJogo($jogo->id, ['tp_message' => [3, 3], 'message' => 'Finalizando rodada...'])
 
-        );
+        // );
         $jogadores = JogadorCartas::where('id_jogo', $jogo->id)->get();
         $cartas_brancas_descartadas = json_decode($req->input('cartas_brancas_descartadas'));
         $jogador_ganhador = json_decode($req->input('jogador_ganhador'));
@@ -156,9 +156,9 @@ class JogoController extends Controller
                     $jogador_vencedor = ["id_jogador" => $jogador->id_jogador, "pontuacao" => count($jogador->pontuacao)];
                 }
             }
-            event(
-                new MessageJogo($jogo->id, ['tp_message' => [1, 3], 'message' => 'Jogador vencedor: ' . $jogador_vencedor["id_jogador"] . '. Pontuacao: ' . $jogador_vencedor["pontuacao"]])
-            );
+            // event(
+            //     new MessageJogo($jogo->id, ['tp_message' => [1, 3], 'message' => 'Jogador vencedor: ' . $jogador_vencedor["id_jogador"] . '. Pontuacao: ' . $jogador_vencedor["pontuacao"]])
+            // );
             return json_encode(["message" => "Partida finalizada", "jogador_vencedor" => $jogador_vencedor["id_jogador"]]);
         }
         //retirando da mão dos jogadores a carta que foi jogada
@@ -182,9 +182,9 @@ class JogoController extends Controller
         $jogo->cartas_pretas_jogo = json_encode(array());
         $jogo->save();
 
-        event(
-            new MessageJogo($jogo->id, ['tp_message' => [3, 4], 'message' => 'Rodada Finalizada'])
-        );
+        // event(
+        //     new MessageJogo($jogo->id, ['tp_message' => [3, 4], 'message' => 'Rodada Finalizada'])
+        // );
         $t = $this->ProximaRodada($req);
         return $t;
     }
@@ -193,17 +193,17 @@ class JogoController extends Controller
     {
         $jogo = Jogo::find($req->input('id_jogo'));
 
-        event(
-            new MessageJogo($jogo->id, ['tp_message' => [3, 1], 'message' => 'Iniciando proxima rodada'])
-        );
+        // event(
+        //     new MessageJogo($jogo->id, ['tp_message' => [3, 1], 'message' => 'Iniciando proxima rodada'])
+        // );
         $jogo->rodada_jogo++;
         $jogo->save();
 
         $jogadores = JogadorCartas::where('id_jogo', $jogo->id)->get();
 
-        event(
-            new MessageJogo($jogo->id, ['tp_message' => [3, 2], 'message' => 'Rodada iniciada', 'jogador_leitor' => $jogadores[$jogo->rodada_jogo % count($jogadores)]->id_jogador])
-        );
+        // event(
+        //     new MessageJogo($jogo->id, ['tp_message' => [3, 2], 'message' => 'Rodada iniciada', 'jogador_leitor' => $jogadores[$jogo->rodada_jogo % count($jogadores)]->id_jogador])
+        // );
 
         $this->DistribuirCartas($jogo);
     }
