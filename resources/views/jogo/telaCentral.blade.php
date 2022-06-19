@@ -12,7 +12,8 @@
                     </div>
                 </div>
                 <div style="display: flex;align-items: center;">
-                    <button type="button" class="btn btn-primary button_carta_preta"> Selecionar carta {{$carta_preta}}  </button>
+                    <button type="button" class="btn btn-primary button_carta_preta"> Selecionar carta
+                        {{ $carta_preta }} </button>
                 </div>
             </div>
         @endforeach
@@ -27,23 +28,24 @@
     </div>
     <div id="box_cartas_brancas" style="display: none;">
         <h1>Minhas Cartas Brancas</h1>
-        @foreach (json_decode($jogo->jogadores) as $jogador)
-            @if (Auth::user()->id == $jogador->jogador)
-                @foreach ($jogador->cartas_brancas as $carta_branca)
-                <div style="display: flex;">
-                    <div class="carta_branca card bg-light mb-3" style="max-width: 18rem;"
-                        idCartaBranca="{{ $carta_branca[0] }}">
-                        <div class="card-header">Patuscada carta_id = {{ $carta_branca[0] }}</div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                {{ App\Models\CartasBrancas::find($carta_branca[0])->texto }}
-                            </p>
+        @foreach (json_decode($jogadores) as $jogador)
+            @if (Auth::user()->id == $jogador->id_jogador)
+                @foreach (json_decode($jogador->cartas) as $carta_branca)
+                    <div style="display: flex;">
+                        <div class="carta_branca card bg-light mb-3" style="max-width: 18rem;"
+                            idCartaBranca="{{ $carta_branca }}">
+                            <div class="card-header">Patuscada carta_id = {{ $carta_branca }}</div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    {{ App\Models\CartasBrancas::find($carta_branca)->texto }}
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: none;align-items: center;">
+                            <button type="button" class="btn btn-primary button_carta_branca"> Selecionar carta
+                                {{ $carta_branca }} </button>
                         </div>
                     </div>
-                    <div style="display: none;align-items: center;">
-                        <button type="button" class="btn btn-primary button_carta_branca"> Selecionar carta {{$carta_branca[0]}} </button>
-                    </div>
-                </div>
                 @endforeach
             @endif
         @endforeach

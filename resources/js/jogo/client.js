@@ -111,6 +111,7 @@ async function JogadaTrigger(message) {
             box_cartas_brancas_leitor.style.display = 'block'
             var carta = await GeradorCarta(message.cartas.id_carta_branca, 'branca', jogadorId);
             box_cartas_brancas_leitor.innerHTML += carta;
+            document.querySelector('#mensagens').innerHTML = `<h1>Jogador ${message.cartas.id_jogador} venceu a rodada!</h1>`
         }
     }
     if(message.tp_jogada == 3){

@@ -59,4 +59,5 @@ Route::controller(JogoController::class)->prefix('jogoApi')->name('jogoApi.')->g
             new JogadasJogo($id, $req->input('my_id'), 1, $req->input('id_carta_preta'))
         );
     })->name('teste');
+    Route::get('/{id}/jogador', 'TesteJogadores')->name('testeJogadores');
 });
