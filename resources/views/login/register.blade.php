@@ -25,6 +25,7 @@
             <input type="text" name="email" id="email_input" placeholder="Digite seu email...">
             <button class="btn btn-primary" type="submit" id="cadaster">Cadastrar</button>
         </form>
+        
         @if ($errors->any())
             @foreach ($errors->all() as $input_error)
                 <div class="alert alert-danger">

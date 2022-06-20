@@ -27,7 +27,7 @@ class LoginFormRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'nickname' => 'required|string|max:15|unique:users',
-            'email' => 'required|max:50',
+            'email' => 'required|max:50|unique:users',
             'password' => 'required'
         ];
     }

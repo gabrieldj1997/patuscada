@@ -52,7 +52,7 @@ class LoginController extends Controller
             }
             return redirect()->back();
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['errors' => 'Erro no servidor, tente novamente mais tarde.', 'message' => $e], 500);
+            return redirect()->back()->withErrors(['errors' => 'Erro no servidor, tente novamente mais tarde.', 'message' => json_encode($e)], 500);
         }
     }
     public function UsersOnline(Request $req)
