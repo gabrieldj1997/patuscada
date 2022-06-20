@@ -3,6 +3,9 @@ require('../bootstrap');
 
 const { default: axios } = require('axios');
 
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
 //URL's
 const startGame = window.location.origin + '/api/jogoApi/start';
 const finishRodada = window.location.origin + '/api/jogoApi/next';
@@ -18,8 +21,6 @@ const inputCartaPretaDescartada = document.querySelector('#inputCartaPretaDescar
 
 window.Echo.channel('jogo-jogada-' + gameId)
     .listen('.jogadas', (data) => {
-        console.log('Observer Message (host)')
-        console.log(data)
         if (data.tp_jogada == 1) {
             inputCartaPretaDescartada.value = data.cartas.id
         } else if (data.tp_jogada == 2) {

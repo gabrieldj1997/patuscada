@@ -25,3 +25,11 @@ Broadcast::channel('App.Chatroom', function ($user) {
 Broadcast::channel('App.jogo-{id}', function ($user) {
   return $user;
 });
+
+Broadcast::channel('App.jogo.jogada-{id}', function ($user) {
+  return $user;
+});
+
+Broadcast::channel('App.jogo.message-{id}', function ($user) {
+  return $user;
+});

@@ -67,8 +67,11 @@
     <button type="button" class="btn btn-primary"
     onclick="window.location='{{ route('login.index') }}'">Voltar</button>
 </body>
+@if ($jogo->estado_jogo == 0)
 <script src="{{ url(mix('js/jogo.js')) }}"></script>
+@else
 <script src="{{ url(mix('js/jogo/client.js')) }}"></script>
+@endif
 @if (Auth::user()->id == $jogo->id_jogador_criador)
     <script src="{{ url('./js/jogo/host.js') }}"></script>
 @endif

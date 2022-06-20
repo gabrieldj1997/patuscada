@@ -1,6 +1,9 @@
 //config
 require('../bootstrap');
 
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
 //Variaveis
 const users_list = document.querySelector('#list_Jogadores');
 const gameId = document.location.pathname.split('/')[2];

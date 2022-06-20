@@ -1,9 +1,9 @@
 {
     "/js/app.js": "/js/app.js?id=a416c20c22105f92fee4d56b262fcc18",
     "/js/chat.js": "/js/chat.js?id=419378e94a8cfdf81eaac21fd5a38b1c",
-    "/js/jogo.js": "/js/jogo.js?id=23549ca789d0d0e8c13b34af766c59b7",
-    "/js/jogo/host.js": "/js/jogo/host.js?id=f37b67ab79ee2f4432aad6447d572e42",
-    "/js/jogo/client.js": "/js/jogo/client.js?id=10a23856cd42188490e2fcc0adc439bb",
+    "/js/jogo.js": "/js/jogo.js?id=df0c26eb6e725f07a8e0114f0f58615b",
+    "/js/jogo/host.js": "/js/jogo/host.js?id=0d3e34ef45c14a4052e51a729c77b39b",
+    "/js/jogo/client.js": "/js/jogo/client.js?id=3c0037772558077dfbc9f5d09e685e72",
     "/css/app.css": "/css/app.css?id=1ba4616002e30d600ff3f664161ff848",
     "/css/style.css": "/css/style.css?id=1b295558cc18798b075100f2c5687a33"
 }

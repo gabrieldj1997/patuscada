@@ -3,6 +3,9 @@ require('../bootstrap');
 
 const { default: axios } = require('axios');
 
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
 //URL's
 const getCartaPreta = window.location.origin + '/api/cartaspretas';
 const getCartaBranca = window.location.origin + '/api/cartasbrancas';
@@ -118,8 +121,6 @@ function MessageTrigger(message) {
 }
 
 async function JogadaTrigger(message) {
-    console.log('MessagTriggers (client):')
-    console.log(message)
     var tpJogador = TipoJogador();
     if (tpJogador == 1) {
         if (message.tp_jogada == 2) {
