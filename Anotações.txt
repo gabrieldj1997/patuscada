@@ -1,11 +1,5 @@
-CreatePartida:
-codigo_jogo = string
+Features:
+Criar coluna de relacionamento cartas jogo para possibilitar inclusão de todas as cartas
 
-StartPartida:
-id = int
-jogadores = json [int]
-
-FinalizarRodada:
-id = int
-cartas_brancas_descartadas = json [{id_jogador:int, carta_descartada:int}]
-jogador_ganhador = json {id_jogador:int, id_carta_branca:int, id_carta_preta:int}
+Bugs:
+conexão com pusher falha as vezes

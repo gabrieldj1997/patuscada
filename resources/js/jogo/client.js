@@ -6,26 +6,93 @@ const { default: axios } = require('axios');
 //URL's
 const getCartaPreta = window.location.origin + '/api/cartaspretas';
 const getCartaBranca = window.location.origin + '/api/cartasbrancas';
+const chosseCartaPreta = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartapreta`;
+const chosseCartaBranca = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartabranca`;
 const chosseVencedor = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/vencedor`;
 
 //Variaveis
 const gameId = document.location.pathname.split('/')[2];
 const box_cartas_brancas_leitor = document.querySelector('#box_cartas_brancas_leitor');
+const box_cartas_brancas_jogador = document.querySelector('#box_cartas_brancas');
+const box_cartas_pretas_leitor = document.querySelector('#box_cartas_pretas_leitor');
 const box_cartas_pretas_jogador = document.querySelector('#box_cartas_pretas');
 const botao_cartas_brancas = document.querySelectorAll('.button_carta_branca');
+const botao_cartas_pretas = document.querySelectorAll('.button_carta_preta');
+const cartas_pretas_leitor = document.querySelectorAll('.carta_preta_leitor');
 
 window.Echo.channel('jogo-message-' + gameId)
     .listen('.message', (data) => {
         MessageTrigger(data)
     });
 
-// window.Echo.channel('jogo-cartas-' + gameId)
-//     .listen('.cartas-' + myId, (data) => {
-//     })
 window.Echo.channel('jogo-jogada-' + gameId)
     .listen('.jogadas', (data) => {
         JogadaTrigger(data)
     })
+
+if (botao_cartas_pretas.length > 0) {
+    botao_cartas_pretas.forEach(carta => {
+        carta.addEventListener('click', (event) => {
+            let cartaEscolhida = event.path[1].previousElementSibling;
+            let idcarta = cartaEscolhida.attributes.idCartaPreta.value;
+            let userConfirm = confirm('Escolher carta ' + idcarta + '?');
+            if (userConfirm) {
+                options = {
+                    method: 'POST',
+                    url: chosseCartaPreta,
+                    data: {
+                        id_carta_preta: idcarta,
+                        my_id: myId
+                    }
+                }
+
+                axios(options);
+                cartas_pretas_leitor.forEach(item => {
+                    if (item != cartaEscolhida) {
+                        item.remove();
+                    }
+                })
+                botao_cartas_pretas.forEach(item => {
+                    item.remove();
+                })
+            }
+        })
+    })
+}
+if (botao_cartas_brancas.length > 0) {
+    botao_cartas_brancas.forEach(carta => {
+        carta.addEventListener('click', (event) => {
+            let idcarta = event.path[1].previousElementSibling.attributes.idCartaBranca.value;
+            let userConfirm = confirm('Escolher carta ' + idcarta + '?');
+            if (userConfirm) {
+                options = {
+                    method: 'POST',
+                    url: chosseCartaBranca,
+                    data: {
+                        id_carta_branca: idcarta,
+                        my_id: myId
+                    }
+                }
+                document.querySelector('#mensagens').innerHTML = `<h1>Aguarde o Leitor escolher uma carta branca</h1>`
+                axios(options);
+                botao_cartas_brancas.forEach(item => {
+                    item.remove();
+                })
+            }
+        })
+    })
+}
+
+if (estadoJogo != 0) {
+    if (myId == jogadorLeitor) {
+        box_cartas_pretas_leitor.style.display = 'block';
+        botao_cartas_brancas.forEach(item => {
+            item.remove();
+        })
+    } else {
+        box_cartas_brancas_jogador.style.display = 'block';
+    }
+}
 
 //Function's
 function MessageTrigger(message) {
@@ -51,6 +118,8 @@ function MessageTrigger(message) {
 }
 
 async function JogadaTrigger(message) {
+    console.log('MessagTriggers (client):')
+    console.log(message)
     var tpJogador = TipoJogador();
     if (tpJogador == 1) {
         if (message.tp_jogada == 2) {
@@ -84,7 +153,7 @@ async function JogadaTrigger(message) {
                     })
                 })
             }
-        }else if(message.tp_jogada == 1){
+        } else if (message.tp_jogada == 1) {
             document.querySelector('#mensagens').innerHTML = `<h1>Aguarde todos escolherem uma carta branca</h1>`
         }
     } else {
@@ -96,14 +165,14 @@ async function JogadaTrigger(message) {
                 botao.parentElement.style.display = 'flex'
             })
             document.querySelector('#mensagens').innerHTML = `<h1>Escolha uma carta branca</h1>`
-        }else if(message.tp_jogada == 3){
+        } else if (message.tp_jogada == 3) {
             box_cartas_brancas_leitor.style.display = 'block'
             var carta = await GeradorCarta(message.cartas.id_carta_branca, 'branca', message.jogadorId);
             box_cartas_brancas_leitor.innerHTML += carta;
             document.querySelector('.button_carta_branca_leitor').remove()
         }
     }
-    if(message.tp_jogada == 3){
+    if (message.tp_jogada == 3) {
         document.querySelector('#mensagens').innerHTML = `<h1>Jogador ${message.cartas.id_jogador} venceu a rodada!</h1>`
     }
 }

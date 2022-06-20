@@ -1,24 +1,9 @@
-const { default: axios } = require('axios');
-const { Channel } = require('pusher-js');
-
 //config
 require('../bootstrap');
-
-//URL's
-const chosseCartaPreta = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartapreta`;
-const chosseCartaBranca = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartabranca`;
 
 //Variaveis
 const users_list = document.querySelector('#list_Jogadores');
 const gameId = document.location.pathname.split('/')[2];
-const botao_cartas_pretas = document.querySelectorAll('.button_carta_preta');
-const botao_cartas_brancas = document.querySelectorAll('.button_carta_branca');
-const botao_cartas_brancas_leitor = document.querySelectorAll('.button_carta_branca_leitor');
-const box_cartas_brancas_leitor = document.querySelector('#box_cartas_brancas_leitor');
-const box_cartas_brancas_jogador = document.querySelector('#box_cartas_brancas');
-const box_cartas_pretas_leitor = document.querySelector('#box_cartas_pretas_leitor');
-const box_cartas_pretas_jogador = document.querySelector('#box_cartas_pretas');
-const cartas_pretas_leitor = document.querySelectorAll('.carta_preta_leitor');
 
 
 
@@ -55,66 +40,3 @@ window.Echo.join('App.jogo-' + gameId)
         })
     });
 
-if (botao_cartas_pretas.length > 0) {
-    botao_cartas_pretas.forEach(carta => {
-        carta.addEventListener('click', (event) => {
-            let cartaEscolhida = event.path[1].previousElementSibling;
-            let idcarta = cartaEscolhida.attributes.idCartaPreta.value;
-            let userConfirm = confirm('Escolher carta ' + idcarta + '?');
-            if (userConfirm) {
-                options = {
-                    method: 'POST',
-                    url: chosseCartaPreta,
-                    data: {
-                        id_carta_preta: idcarta,
-                        my_id: myId
-                    }
-                }
-
-                axios(options);
-                cartas_pretas_leitor.forEach(item => {
-                    if (item != cartaEscolhida) {
-                        item.remove();
-                    }
-                })
-                botao_cartas_pretas.forEach(item => {
-                    item.remove();
-                })
-            }
-        })
-    })
-}
-if (botao_cartas_brancas.length > 0) {
-    botao_cartas_brancas.forEach(carta => {
-        carta.addEventListener('click', (event) => {
-            let idcarta = event.path[1].previousElementSibling.attributes.idCartaBranca.value;
-            let userConfirm = confirm('Escolher carta ' + idcarta + '?');
-            if (userConfirm) {
-                options = {
-                    method: 'POST',
-                    url: chosseCartaBranca,
-                    data: {
-                        id_carta_branca: idcarta,
-                        my_id: myId
-                    }
-                }
-                document.querySelector('#mensagens').innerHTML = `<h1>Aguarde o Leitor escolher uma carta branca</h1>`
-                axios(options);
-                botao_cartas_brancas.forEach(item => {
-                    item.remove();
-                })
-            }
-        })
-    })
-}
-
-if (estadoJogo != 0) {
-    if (myId == jogadorLeitor) {
-        box_cartas_pretas_leitor.style.display = 'block';
-        botao_cartas_brancas.forEach(item => {
-            item.remove();
-        })
-    } else {
-        box_cartas_brancas_jogador.style.display = 'block';
-    }
-}
