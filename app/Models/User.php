@@ -26,7 +26,7 @@ class User extends Authenticatable
         'password',
         'api_token',
         'status',
-        'pontuacao'
+        'tp_usuario'
     ];
 
     /**

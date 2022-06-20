@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('api_token')->nullable();
             $table->string('status')->default('offline');
-            $table->integer('pontuacao')->default(0);
+            $table->integer('tp_usuario')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
