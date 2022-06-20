@@ -16,14 +16,15 @@ if (Session::has('error')) {
     <link href="{{ url(mix('css/app.css')) }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 </head>
-
 <body>
     <div class="container">
         @if (Auth::check())
             <h2>Ola <strong>{{ Auth::user()->nickname }}</strong> </h2>
+            @if(Auth::user()->tp_usuario == 1)
             <button type="button" class="btn btn-primary"
-                onclick="window.location='{{ route('login.truncate') }}'">Deletar todos logins</button>
-            <button type="button" class="btn btn-primary" onclick="window.location='{{ route('chat') }}'">chat</button>
+                onclick="window.location='{{ route('login.truncate') }}'">Deletar todos usuarios</button>
+            @endif
+                <button type="button" class="btn btn-primary" onclick="window.location='{{ route('chat') }}'">chat</button>
             <button type="button" class="btn btn-primary"
                 onclick="window.location='{{ route('login.logout') }}'">logout</button>
 

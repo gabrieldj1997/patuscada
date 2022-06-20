@@ -49,6 +49,7 @@ Route::controller(JogoController::class)->prefix('jogoApi')->name('jogoApi.')->g
     Route::post('/{jogoId}/cartapreta', 'ChooseCartaPreta')->name('chossecartapreta');
     Route::post('/{jogoId}/cartabranca', 'ChooseCartaBranca')->name('chossecartabranca');
     Route::post('/{jogoId}/vencedor', 'ChooseJogadorVencedor')->name('chossejogadorvencedor');
+    Route::post('/{jogoId}/changeCartas', 'ChangeCartasBrancas')->name('changecartas');
     //Teste
     Route::post('/{id}/teste', function(Request $req, $id){
         event(

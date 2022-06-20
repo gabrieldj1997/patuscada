@@ -4,7 +4,7 @@ require('../bootstrap');
 const { default: axios } = require('axios');
 
 // Enable pusher logging - don't include this in production
-Pusher.logToConsole = true;
+// Pusher.logToConsole = true;
 
 //URL's
 const startGame = window.location.origin + '/api/jogoApi/start';
@@ -43,6 +43,14 @@ window.Echo.channel('jogo-jogada-' + gameId)
             inputIdJogo.value = data.jogoId
             inputJogadorGanhador.value = JSON.stringify(jogadorGanhador)
             buttonFinalizarRodada.style.display = 'block';
+        } else if (data.tp_jogada == 4){
+            if (inputCartaBrancaDescartada.value == '') {
+                inputCartaBrancaDescartada.value = JSON.stringify([])
+            }
+            let val = JSON.parse(inputCartaBrancaDescartada.value)
+            val.push({ id: data.jogadorId, cartas: [data.cartas.id] })
+            val[val.findIndex((item) => { return item.id === data.jogadorId })].cartas = data.cartas
+            inputCartaBrancaDescartada.value = JSON.stringify(val)
         }
     })
 

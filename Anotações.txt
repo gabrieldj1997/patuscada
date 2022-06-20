@@ -1,5 +1,5 @@
 Features:
 Criar coluna de relacionamento cartas jogo para possibilitar inclusão de todas as cartas
+Criar evento de jogada aonde o Leitor poderá descartar todas as cartas brancas
 
 Bugs:
-conexão com pusher falha as vezes

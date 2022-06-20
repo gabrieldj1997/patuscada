@@ -4,7 +4,7 @@ require('../bootstrap');
 const { default: axios } = require('axios');
 
 // Enable pusher logging - don't include this in production
-Pusher.logToConsole = true;
+// Pusher.logToConsole = true;
 
 //URL's
 const getCartaPreta = window.location.origin + '/api/cartaspretas';
@@ -12,6 +12,7 @@ const getCartaBranca = window.location.origin + '/api/cartasbrancas';
 const chosseCartaPreta = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartapreta`;
 const chosseCartaBranca = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartabranca`;
 const chosseVencedor = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/vencedor`;
+const changeCartas = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/changeCartas`;
 
 //Variaveis
 const gameId = document.location.pathname.split('/')[2];
@@ -22,6 +23,7 @@ const box_cartas_pretas_jogador = document.querySelector('#box_cartas_pretas');
 const botao_cartas_brancas = document.querySelectorAll('.button_carta_branca');
 const botao_cartas_pretas = document.querySelectorAll('.button_carta_preta');
 const cartas_pretas_leitor = document.querySelectorAll('.carta_preta_leitor');
+const button_trocar_cartas = document.querySelector('#button_trocar_cartas');
 
 window.Echo.channel('jogo-message-' + gameId)
     .listen('.message', (data) => {
@@ -97,6 +99,22 @@ if (estadoJogo != 0) {
     }
 }
 
+if(button_trocar_cartas != null){
+    button_trocar_cartas.addEventListener('click', (event) => {
+        let userConfirm = confirm('Trocar todas suas cartas brancas?');
+        if (userConfirm) {
+            options = {
+                method: 'POST',
+                url: changeCartas,
+                data: {
+                    my_id: myId
+                }
+            }
+            axios(options);
+            button_trocar_cartas.remove();
+        }
+    })
+}
 //Function's
 function MessageTrigger(message) {
     //primeira classe

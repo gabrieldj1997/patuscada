@@ -27,13 +27,13 @@ class JogoController extends Controller
         $jogo->codigo = $req->input('codigo_jogo');
         $jogo->id_jogador_criador = Auth::user()->id;
 
-        $cartas_brancas = CartasBrancas::all('id')->take(50);
+        $cartas_brancas = CartasBrancas::all('id');
         $cartas_brancas = json_decode($cartas_brancas->map(function ($item) {
             return $item->id;
         })->toJson());
         $jogo->cartas_brancas_monte = json_encode($cartas_brancas);
 
-        $cartas_pretas = CartasPretas::all('id')->take(50);
+        $cartas_pretas = CartasPretas::all('id');
         $cartas_pretas = json_decode($cartas_pretas->map(function ($item) {
             return $item->id;
         })->toJson());
@@ -262,6 +262,19 @@ class JogoController extends Controller
                 $req->input('my_id'),
                 3,
                 ["id_jogador" => $req->input('id_jogador_ganhador'), "id_carta_preta" => $carta_preta->id, "id_carta_branca" => $carta_branca->id]
+            )
+        );
+    }
+
+    public function ChangeCartasBrancas(Request $req, $jogoId){
+
+        $jogador_carta = JogadorCartas::where('id_jogador',$req->input('my_id'))->where('id_jogo',$jogoId)->first();
+        event(
+            new JogadasJogo(
+                $jogoId,
+                $req->input('my_id'),
+                4,
+                json_decode($jogador_carta->cartas)
             )
         );
     }
