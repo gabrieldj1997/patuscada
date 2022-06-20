@@ -21,7 +21,6 @@ window.Echo.channel('jogo-message-' + gameId)
 
 // window.Echo.channel('jogo-cartas-' + gameId)
 //     .listen('.cartas-' + myId, (data) => {
-//         console.log(data)
 //     })
 window.Echo.channel('jogo-jogada-' + gameId)
     .listen('.jogadas', (data) => {

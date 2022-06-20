@@ -35,6 +35,9 @@
             @else
                 <h1>Aguarde o leitor escolher uma carta preta</h1>
             @endif
+            @foreach($jogadores as $jogador)
+                <div>{{App\Models\User::find($jogador->id_jogador)->nickname}}:{{$jogador->pontuacao}}</div>
+            @endforeach
         @endIf
     </div>
     @if (isset($jogo))

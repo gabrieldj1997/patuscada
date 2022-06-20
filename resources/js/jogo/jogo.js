@@ -24,25 +24,21 @@ const cartas_pretas_leitor = document.querySelectorAll('.carta_preta_leitor');
 
 window.Echo.join('App.jogo-' + gameId)
     .joining((user) => {
-        console.log('joining: ', user);
         let element = document.getElementsByClassName(`jogador-${user.nickname}`);
         if (element.length == 0 && users_list != null) {
             users_list.innerHTML += `<li class="jogador-${user.nickname}" user_id="${user.id}"><strong>${user.nickname}</strong></li>`;
         }
     }).leaving((user) => {
-        console.log('leaving: ', user);
         if (users_list != null) {
             document.querySelector(`.jogador-${user.nickname}`).remove();
         }
     }).listen('UserOnline', (e) => {
-        console.log('UserOnline: ', e);
         let element = document.getElementsByClassName(`jogador-${e.user.nickname}`);
         if (element.length == 0 && users_list != null) {
             users_list.innerHTML += `<li class="jogador-${e.user.nickname}" user_id="${e.user.id}"><strong>${e.user.nickname}</strong></li>`;
         }
 
     }).listen('UserOffline', (e) => {
-        console.log('UserOffline: ', e);
         if (e.user.nickname != nickname_input.value) {
             try {
                 document.querySelector(`.jogador-${e.user.nickname}`).remove();
@@ -51,7 +47,6 @@ window.Echo.join('App.jogo-' + gameId)
             }
         }
     }).listen('.pusher:subscription_succeeded', (membros) => {
-        console.log('membros: ', membros);
 
         Object.keys(membros.members).forEach(id => {
             if (users_list != null) {
@@ -63,7 +58,6 @@ window.Echo.join('App.jogo-' + gameId)
 if (botao_cartas_pretas.length > 0) {
     botao_cartas_pretas.forEach(carta => {
         carta.addEventListener('click', (event) => {
-            console.log(event.path[1].previousElementSibling.attributes.idCartaPreta.value);
             let cartaEscolhida = event.path[1].previousElementSibling;
             let idcarta = cartaEscolhida.attributes.idCartaPreta.value;
             let userConfirm = confirm('Escolher carta ' + idcarta + '?');
@@ -78,8 +72,8 @@ if (botao_cartas_pretas.length > 0) {
                 }
 
                 axios(options);
-                cartas_pretas_leitor.forEach(item =>{
-                    if(item != cartaEscolhida){
+                cartas_pretas_leitor.forEach(item => {
+                    if (item != cartaEscolhida) {
                         item.remove();
                     }
                 })
@@ -93,7 +87,6 @@ if (botao_cartas_pretas.length > 0) {
 if (botao_cartas_brancas.length > 0) {
     botao_cartas_brancas.forEach(carta => {
         carta.addEventListener('click', (event) => {
-            console.log(event.path[1].previousElementSibling.attributes.idCartaBranca.value);
             let idcarta = event.path[1].previousElementSibling.attributes.idCartaBranca.value;
             let userConfirm = confirm('Escolher carta ' + idcarta + '?');
             if (userConfirm) {
@@ -105,6 +98,7 @@ if (botao_cartas_brancas.length > 0) {
                         my_id: myId
                     }
                 }
+                document.querySelector('#mensagens').innerHTML = `<h1>Aguarde o Leitor escolher uma carta branca</h1>`
                 axios(options);
                 botao_cartas_brancas.forEach(item => {
                     item.remove();
