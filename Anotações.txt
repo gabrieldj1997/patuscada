@@ -3,3 +3,5 @@ Criar coluna de relacionamento cartas jogo para possibilitar inclusão de todas 
 Criar evento de jogada aonde o Leitor poderá descartar todas as cartas brancas
 
 Bugs:
+Cartas pretas não estão sendo excluidas apos serem escolhidas
+cartas brancas com bug

@@ -99,7 +99,7 @@ if (estadoJogo != 0) {
     }
 }
 
-if(button_trocar_cartas != null){
+if (button_trocar_cartas != null) {
     button_trocar_cartas.addEventListener('click', (event) => {
         let userConfirm = confirm('Trocar todas suas cartas brancas?');
         if (userConfirm) {
@@ -123,6 +123,8 @@ function MessageTrigger(message) {
         case 1:
             if (message.data.tp_message[1] == 2) {
                 window.location.href = window.location.href;
+            } else if (message.data.tp_message[1] == 3) {
+                document.querySelector('#mensagens').innerHTML = `<h1>Jogo finalizado! ${message.data.message}</h1>`
             }
             break;
         case 2:

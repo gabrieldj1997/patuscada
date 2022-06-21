@@ -39,6 +39,12 @@
             @foreach ($jogadores as $jogador)
                 <div>{{ App\Models\User::find($jogador->id_jogador)->nickname }}:{{ $jogador->pontuacao }}</div>
             @endforeach
+            <div>
+                <p>Cartas Brancas restantes: {{count(json_decode($jogo->cartas_brancas_monte))}}</p>
+            </div>
+            <div>
+                <p>Cartas Pretas restantes: {{count(json_decode($jogo->cartas_pretas_monte))}}</p>
+            </div>
         @endIf
     </div>
     @if (isset($jogo))
