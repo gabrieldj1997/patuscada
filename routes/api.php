@@ -7,6 +7,7 @@ use App\Http\Controllers\CartasPretasController;
 use App\Http\Controllers\JogoController;
 use App\Http\Controllers\UserOfflineController;
 use App\Http\Controllers\UserOnlineController;
+use App\Http\Controllers\UserController;
 use App\Events\MessageJogo;
 use App\Events\JogadasJogo;
 /*
@@ -61,4 +62,8 @@ Route::controller(JogoController::class)->prefix('jogoApi')->name('jogoApi.')->g
         );
     })->name('teste');
     Route::get('/{id}/jogador', 'TesteJogadores')->name('testeJogadores');
+});
+
+Route::controller(UserController::class)->prefix('user')->name('user.')->group(function(){
+    Route::get('/{id}', 'GetUser')->name('get');
 });

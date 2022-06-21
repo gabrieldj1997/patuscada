@@ -13,6 +13,7 @@ const chosseCartaPreta = window.location.origin + `/api/jogoApi/${document.locat
 const chosseCartaBranca = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/cartabranca`;
 const chosseVencedor = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/vencedor`;
 const changeCartas = window.location.origin + `/api/jogoApi/${document.location.pathname.split('/')[2]}/changeCartas`;
+const getNickname = window.location.origin + `/api/user`;
 
 //Variaveis
 const gameId = document.location.pathname.split('/')[2];
@@ -194,7 +195,8 @@ async function JogadaTrigger(message) {
         }
     }
     if (message.tp_jogada == 3) {
-        document.querySelector('#mensagens').innerHTML = `<h1>Jogador ${message.cartas.id_jogador} venceu a rodada!</h1>`
+        user = await ConsultarUsuario(message.cartas.id_jogador)
+        document.querySelector('#mensagens').innerHTML = `<h1>Jogador ${user.nickname} venceu a rodada!</h1>`
     }
 }
 
@@ -218,4 +220,14 @@ async function GeradorCarta(id, tipo, idUser) {
     carta += `</div>`
     carta += (tipo == 'preta') ? '</div>' : ` <div style="display: flex;align-items: center;"><button type="button" class="btn btn-primary button_carta_branca_leitor"> Selecionar carta ${cartaObj.id} </button></div></div>`
     return carta;
+}
+
+async function ConsultarUsuario(id){
+    var option = {
+        method: 'GET',
+        url: getNickname + '/' + id
+    }
+    var user = await axios(option);
+    user = user.data
+    return user;
 }

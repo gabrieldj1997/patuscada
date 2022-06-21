@@ -34,7 +34,7 @@
             @if (json_decode($jogadores)[($jogo->rodada_jogo - 1) % count(json_decode($jogadores))]->id_jogador == Auth::user()->id)
                 <h1>Escolha uma carta preta</h1>
             @else
-                <h1>Aguarde o leitor escolher uma carta preta</h1>
+                <h1>Aguarde o {{App\Models\User::find(json_decode($jogadores)[($jogo->rodada_jogo - 1) % count(json_decode($jogadores))]->id_jogador)->nickname}} escolher uma carta preta</h1>
             @endif
             @foreach ($jogadores as $jogador)
                 <div>{{ App\Models\User::find($jogador->id_jogador)->nickname }} : {{ count(json_decode($jogador->pontuacao)) }}</div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Jogo;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\CartasBrancas;
 use App\Models\CartasPretas;
 use App\Models\JogadorCartas;
@@ -171,7 +172,7 @@ class JogoController extends Controller
                 }
             }
             event(
-                new MessageJogo($jogo->id, ['tp_message' => [1, 3], 'message' => 'Jogador vencedor: ' . $jogador_vencedor["id_jogador"] . '. Pontuacao: ' . $jogador_vencedor["pontuacao"]])
+                new MessageJogo($jogo->id, ['tp_message' => [1, 3], 'message' => 'Jogador vencedor: ' . User::find($jogador_vencedor["id_jogador"])->nickname . '. Pontuacao: ' . $jogador_vencedor["pontuacao"]])
             );
             return json_encode(["message" => "Partida finalizada", "jogador_vencedor" => $jogador_vencedor["id_jogador"]]);
         }
@@ -211,8 +212,6 @@ class JogoController extends Controller
         // );
         $jogo->rodada_jogo++;
         $jogo->save();
-
-        $jogadores = JogadorCartas::where('id_jogo', $jogo->id)->get();
 
         // event(
         //     new MessageJogo($jogo->id, ['tp_message' => [3, 2], 'message' => 'Rodada iniciada', 'jogador_leitor' => $jogadores[$jogo->rodada_jogo % count($jogadores)]->id_jogador])
