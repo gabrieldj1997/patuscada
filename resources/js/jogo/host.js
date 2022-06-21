@@ -18,7 +18,7 @@ const inputIdJogo = document.querySelector('#inputIdJogo');
 const inputJogadorGanhador = document.querySelector('#inputJogadorGanhador');
 const inputCartaBrancaDescartada = document.querySelector('#inputCartaBrancaDescartada');
 const inputCartaPretaDescartada = document.querySelector('#inputCartaPretaDescartada');
-const inputCartaBrancaGanhadora = document.querySelector('#inputCartaPretaDescartada');
+const inputCartaBrancaGanhadora = document.querySelector('#inputCartaBrancaGanhadora');
 
 window.Echo.channel('jogo-jogada-' + gameId)
     .listen('.jogadas', (data) => {
@@ -42,6 +42,7 @@ window.Echo.channel('jogo-jogada-' + gameId)
                 id_carta_branca: data.cartas.id_carta_branca
             }
             inputIdJogo.value = data.jogoId
+            inputCartaBrancaGanhadora.value = data.cartas.id_carta_branca
             inputJogadorGanhador.value = JSON.stringify(jogadorGanhador)
             buttonFinalizarRodada.style.display = 'block';
         } else if (data.tp_jogada == 4){

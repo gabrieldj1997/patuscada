@@ -70,6 +70,7 @@
         <input id="inputJogadorGanhador" type="text" style="display: none;"/>
         <input id="inputCartaBrancaDescartada" type="text" style="display: none;"/>
         <input id="inputCartaPretaDescartada" type="text" style="display: none;"/>
+        <input id="inputCartaBrancaGanhadora" type="text" style="display: none;"/>
     @endif
     @if ($jogo->estado_jogo != 0)
         @if (json_decode($jogadores)[($jogo->rodada_jogo - 1) % count(json_decode($jogadores))]->id_jogador == Auth::user()->id)

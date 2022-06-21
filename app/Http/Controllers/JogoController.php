@@ -27,7 +27,7 @@ class JogoController extends Controller
         $jogo->codigo = $req->input('codigo_jogo');
         $jogo->id_jogador_criador = Auth::user()->id;
 
-        $cartas_brancas = CartasBrancas::all('id')->take(30);
+        $cartas_brancas = CartasBrancas::all('id')->take(60);
         $cartas_brancas = json_decode($cartas_brancas->map(function ($item) {
             return $item->id;
         })->toJson());
@@ -191,7 +191,7 @@ class JogoController extends Controller
 
 
         //retirando do jogo a carta preta descartada
-        array_slice($cartas_pretas_monte, array_search($carta_preta_descartada, $cartas_pretas_monte), 1);
+        array_splice($cartas_pretas_monte, array_search($carta_preta_descartada, $cartas_pretas_monte), 1);
         $jogo->cartas_pretas_monte = json_encode($cartas_pretas_monte);
         $jogo->cartas_pretas_jogo = json_encode(array());
         $jogo->save();
