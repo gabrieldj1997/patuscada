@@ -62,7 +62,7 @@ class JogoController extends Controller
             $jogador_carta->id_jogo = $jogo->id;
             $jogador_carta->id_jogador = $jogador;
             $jogador_carta->cartas = json_encode(array());
-            $jogador_carta->pontuacao = 0;
+            $jogador_carta->pontuacao = json_encode(array());
             $jogador_carta->save();
         }
 
@@ -98,12 +98,12 @@ class JogoController extends Controller
         $cartas_pretas_monte = json_decode($jogo->cartas_pretas_monte);
         $cartas_pretas_jogo = json_decode($jogo->cartas_pretas_jogo);
 
-        for ($i = count($cartas_pretas_jogo); $i < (3 > count($cartas_pretas_monte) ? 3 : count($cartas_pretas_monte)); $i++) {
-            $carta = array_splice($cartas_pretas_monte, (rand(0, count($cartas_pretas_monte) - 1)), 1);
-            array_push($cartas_pretas_jogo, $carta[0]);
+        for ($i = count($cartas_pretas_jogo); $i < (3 < count($cartas_pretas_monte) ? 3 : count($cartas_pretas_monte)); $i++) {
+            $carta = $cartas_pretas_monte[(rand(0, count($cartas_pretas_monte) - 1))];
+            array_push($cartas_pretas_jogo, $carta);
         }
 
-        $jogo->cartas_pretas_monte = json_decode($cartas_pretas_monte);
+        $jogo->cartas_pretas_monte = json_encode($cartas_pretas_monte);
         $jogo->cartas_pretas_jogo = json_encode($cartas_pretas_jogo);
 
         // for ($i = 0; $i < count($jogadores); $i++) {
@@ -140,32 +140,34 @@ class JogoController extends Controller
         $cartas_brancas_descartadas = json_decode($req->input('cartas_brancas_descartadas'));
         $jogador_ganhador = json_decode($req->input('jogador_ganhador'));
         $carta_preta_descartada = json_decode($req->input('carta_preta_descartada'));
-        $cartas_pretas_jogo = json_decode($jogo->cartas_pretas_jogo);
+        $carta_branca_ganhadora = json_decode($req->input('carta_branca_ganhadora'));
+        $cartas_pretas_monte = json_decode($jogo->cartas_pretas_monte);
 
         //pontuando jogador ganhador
         $indexJogador = array_search($jogador_ganhador->id_jogador, array_column(json_decode($jogadores), 'id_jogador'));
         $jogador_vencedor = $jogadores[$indexJogador];
-        $jogador_vencedor->pontuacao++;
+        $pontuacao = json_decode($jogador_vencedor->pontuacao);
+        array_push($pontuacao, array($carta_branca_ganhadora, $carta_preta_descartada));
+        $jogador_vencedor->pontuacao = json_encode($pontuacao);
         $jogador_vencedor->save();
         $jogadores[$indexJogador] = $jogador_vencedor;
 
         $count_cartas_descartadas = 0;
         foreach ($cartas_brancas_descartadas as $cartas_descartadas){
             foreach($cartas_descartadas->cartas as $carta){
-                $count_cartas_descartadas += count(json_decode($carta));
+                $count_cartas_descartadas ++;
             }
         }
-
         if (
             count(json_decode($jogo->cartas_brancas_monte)) < count($jogadores) 
-            || count(json_decode($jogo->cartas_pretas_monte)) == 0
+            || (count(json_decode($jogo->cartas_pretas_monte)) + count(json_decode($jogo->cartas_pretas_jogo))) == 0
             || count(json_decode($jogo->cartas_brancas_monte)) < $count_cartas_descartadas
             ){
             $this->FinalizarPartida($jogo->id);
             $jogador_vencedor = ["id_jogador" => 0, "pontuacao" => 0];
             foreach ($jogadores as $jogador) {
-                if (count($jogador->pontuacao) > $jogador_vencedor["pontuacao"]) {
-                    $jogador_vencedor = ["id_jogador" => $jogador->id_jogador, "pontuacao" => count($jogador->pontuacao)];
+                if (count(json_decode($jogador->pontuacao)) > $jogador_vencedor['pontuacao']) {
+                    $jogador_vencedor = ["id_jogador" => $jogador->id_jogador, "pontuacao" => count(json_decode($jogador->pontuacao))];
                 }
             }
             event(
@@ -189,8 +191,9 @@ class JogoController extends Controller
 
 
         //retirando do jogo a carta preta descartada
-        array_slice($cartas_pretas_jogo, array_search($carta_preta_descartada, $cartas_pretas_jogo), 1);
-        $jogo->cartas_pretas_jogo = json_encode($cartas_pretas_jogo);
+        array_slice($cartas_pretas_monte, array_search($carta_preta_descartada, $cartas_pretas_monte), 1);
+        $jogo->cartas_pretas_monte = json_encode($cartas_pretas_monte);
+        $jogo->cartas_pretas_jogo = json_encode(array());
         $jogo->save();
 
         // event(

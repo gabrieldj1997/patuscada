@@ -18,6 +18,7 @@ const inputIdJogo = document.querySelector('#inputIdJogo');
 const inputJogadorGanhador = document.querySelector('#inputJogadorGanhador');
 const inputCartaBrancaDescartada = document.querySelector('#inputCartaBrancaDescartada');
 const inputCartaPretaDescartada = document.querySelector('#inputCartaPretaDescartada');
+const inputCartaBrancaGanhadora = document.querySelector('#inputCartaPretaDescartada');
 
 window.Echo.channel('jogo-jogada-' + gameId)
     .listen('.jogadas', (data) => {
@@ -86,6 +87,7 @@ buttonFinalizarRodada.onclick = () => {
         data: {
             id_jogo: inputIdJogo.value,
             cartas_brancas_descartadas: inputCartaBrancaDescartada.value,
+            carta_branca_ganhadora: inputCartaBrancaGanhadora.value,
             carta_preta_descartada: inputCartaPretaDescartada.value,
             jogador_ganhador: inputJogadorGanhador.value,
             my_id: myId
