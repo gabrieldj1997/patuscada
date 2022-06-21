@@ -37,7 +37,7 @@
                 <h1>Aguarde o leitor escolher uma carta preta</h1>
             @endif
             @foreach ($jogadores as $jogador)
-                <div>{{ App\Models\User::find($jogador->id_jogador)->nickname }}:{{ count(json_decode($jogador->pontuacao)) }}</div>
+                <div>{{ App\Models\User::find($jogador->id_jogador)->nickname }} : {{ count(json_decode($jogador->pontuacao)) }}</div>
             @endforeach
             <div>
                 <p>Cartas Brancas restantes: {{count(json_decode($jogo->cartas_brancas_monte))}}</p>
